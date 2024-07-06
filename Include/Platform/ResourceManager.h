@@ -43,7 +43,6 @@ namespace HC {
 
 
         bool Load() override {
-
             if(!reader.OpenFile()) {
                 return false;
             }
@@ -123,6 +122,7 @@ namespace HC {
         bool Unload(const std::string& filepath) {
             auto it = resources.find(filepath);
             if (it != resources.end()) {
+                it->second.reset();
                 resources.erase(it);
                 return true;
             }

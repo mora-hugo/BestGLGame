@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameLayer.h"
+#include "InputManager.h"
 #include <memory>
 
 namespace HC {
@@ -17,9 +18,11 @@ namespace HC {
 #if REMOVE_IMGUI == 0
         void DrawImGui() override;
 #endif
+
+        void InputCallback(const KeyboardInput& input);
     private:
         float cachedDeltaTime = 0.0f;
-        std::unique_ptr<Model> model;
+        Sprite sprite {AABB(glm::vec2(0.0f, 0.0f), 0.5, 0.5)};
 
 
     };

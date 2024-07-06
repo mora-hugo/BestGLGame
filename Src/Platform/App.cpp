@@ -26,11 +26,6 @@ HC::App::App() {
     gameLayer = std::make_unique<FirstGameLayer>();
 
     InputManager::GetInstance()->Init(window.get());
-    InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&HC::App::Input, this, 1));
-}
-
-void HC::App::Input(const HC::KeyboardInput &input) {
-    std::cout << "Key: " << input.key << std::endl;
 }
 
 

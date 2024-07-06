@@ -1,30 +1,28 @@
 
 #include <FirstGameLayer.h>
+#include <iostream>
 #include "imgui.h"
 #include "Model.h"
+#include "InputManager.h"
+#include "GLFW/glfw3.h"
 
 namespace HC {
     void FirstGameLayer::BeginPlay() {
         GameLayer::BeginPlay();
-        std::vector<Vertex> vertices = {
-                // positions          // colors           // texture coords
-                {{0.5f,  0.5f, 0.0f},   {1.0f, 0.0f, 0.0f},   {1.0f, 1.0f}}, // top right
-                {{0.5f, -0.5f, 0.0f},   {0.0f, 1.0f, 0.0f},   {1.0f, 0.0f}},   // bottom right
-                {{-0.5f, -0.5f, 0.0f},   {0.0f, 0.0f, 1.0f},   {0.0f, 0.0f}},   // bottom left
-                 {{-0.5f,  0.5f, 0.0f},   {1.0f, 1.0f, 0.0f},   {0.0f, 1.0f}}    // top left
-        };
-        std::vector<GLuint> indices {
-                0, 1, 3, // first triangle
-                1, 2, 3  // second triangle
-        };
-        model = std::make_unique<Model>(vertices, indices);
 
+        InputManager::GetInstance()->ListenKey(GLFW_KEY_W);
+        InputManager::GetInstance()->ListenKey(GLFW_KEY_S);
+        InputManager::GetInstance()->ListenKey(GLFW_KEY_A);
+        InputManager::GetInstance()->ListenKey(GLFW_KEY_D);
 
+    InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputCallback, this, 1));
     }
 
     void FirstGameLayer::Update(float deltaTime) {
         GameLayer::Update(deltaTime);
         cachedDeltaTime = deltaTime;
+
+        sprite.Update();
 
     }
 
@@ -35,7 +33,10 @@ namespace HC {
 
     void FirstGameLayer::Draw() {
         GameLayer::Draw();
-        model->Draw();
+
+        Renderer.DrawSprite(sprite);
+
+
     }
 #if REMOVE_IMGUI == 0
     void FirstGameLayer::DrawImGui() {
@@ -52,5 +53,20 @@ namespace HC {
 
     FirstGameLayer::FirstGameLayer() {
 
+    }
+
+    void FirstGameLayer::InputCallback(const KeyboardInput& input) {
+        if (input.key == GLFW_KEY_W) {
+            sprite.spriteAABB.start.y += 1.f * cachedDeltaTime;
+        }
+        if (input.key == GLFW_KEY_S) {
+            sprite.spriteAABB.start.y -= 1.f * cachedDeltaTime;
+        }
+        if (input.key == GLFW_KEY_A) {
+            sprite.spriteAABB.start.x -= 1.f * cachedDeltaTime;
+        }
+        if (input.key == GLFW_KEY_D) {
+            sprite.spriteAABB.start.x += 1.f * cachedDeltaTime;
+        }
     }
 }

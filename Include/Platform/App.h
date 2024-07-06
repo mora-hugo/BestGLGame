@@ -12,7 +12,6 @@ namespace HC {
         App();
         ~App();
         int Run();
-        void Input(const KeyboardInput &input);
         float CalculateDeltaTime();
 
     private:

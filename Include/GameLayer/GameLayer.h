@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Program.h"
+
+#include "SpriteRenderer.h"
 
 namespace HC {
     class GameLayer {
@@ -25,7 +26,7 @@ namespace HC {
 #endif
 
     protected:
-        Program program;
+        SpriteRenderer Renderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
 
     };
 };

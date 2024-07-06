@@ -12,7 +12,7 @@ namespace HC {
             ~Program();
             void AttachShader(GLuint shaderId);
             void DeleteShader(GLuint shaderId);
-            void Use();
+            void Use() const;
             void Link();
             void GetCompileStatus(CompileStatus& compileStatus);
             GLuint GetId() const { return Id;}

@@ -34,7 +34,7 @@ namespace HC {
         glDeleteShader(shaderId);
     }
 
-    void Program::Use() {
+    void Program::Use() const {
         glUseProgram(Id);
     }
 
