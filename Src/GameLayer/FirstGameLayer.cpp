@@ -1,10 +1,9 @@
 
 #include <FirstGameLayer.h>
-#include <iostream>
-#include "imgui.h"
-#include "Model.h"
-#include "InputManager.h"
-#include "GLFW/glfw3.h"
+#include <imgui.h>
+#include <InputManager.h>
+#include <GLFW/glfw3.h>
+#include <ResourceManager.h>
 
 namespace HC {
     void FirstGameLayer::BeginPlay() {
@@ -15,7 +14,8 @@ namespace HC {
         InputManager::GetInstance()->ListenKey(GLFW_KEY_A);
         InputManager::GetInstance()->ListenKey(GLFW_KEY_D);
 
-    InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputCallback, this, 1));
+        InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputCallback, this, 1));
+
     }
 
     void FirstGameLayer::Update(float deltaTime) {
@@ -42,7 +42,7 @@ namespace HC {
     void FirstGameLayer::DrawImGui() {
         GameLayer::DrawImGui();
         ImGui::Begin("Performances");
-        ImGui::Text("Frame time: %f", cachedDeltaTime);
+        ImGui::Text("Frame time (ms): %f", cachedDeltaTime);
         ImGui::Text("FPS: %f", 1.0f / cachedDeltaTime);
         ImGui::End();
     }

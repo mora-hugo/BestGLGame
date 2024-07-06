@@ -10,6 +10,7 @@
 #include <Shader.h>
 #include <Assertion.h>
 #include <format>
+#include <stb_image/stb_image.h>
 
 namespace HC {
     class IResource {
@@ -37,7 +38,7 @@ namespace HC {
 
     class FileResource : public Resource<FileResource> {
     public:
-        FileResource(const std::string& filepath) : Resource(filepath), reader(filepath), writer(filepath) {
+        FileResource(const std::string& filepath, bool bIsBinaryFile = false) : Resource(filepath), reader(filepath, bIsBinaryFile), writer(filepath) {
 
         }
 
@@ -87,6 +88,7 @@ namespace HC {
             CompileStatus compileStatus;
             shader.GetCompileStatus(compileStatus);
             Assertion(compileStatus.success, std::format("Shader compiling error: {0}", compileStatus.infoLog));
+            bytes.clear();
             return bSuccess;
 
         }
@@ -94,6 +96,35 @@ namespace HC {
 
         Shader shader;
 
+    };
+
+    class TextureResource : public FileResource {
+    public:
+        TextureResource(const std::string& filepath) : FileResource(filepath, true) {
+
+        }
+
+        bool Load() override {
+            bool bSuccess = FileResource::Load();
+            if (!bSuccess) {
+                return false;
+            }
+
+            data = stbi_load_from_memory(bytes.data(), bytes.size(), &width, &height, &channels, 0);
+            bytes.clear();
+            if (!data) {
+                return false;
+            }
+
+            return true;
+        }
+
+        bool Save() override {
+            return false;
+        }
+
+        stbi_uc* data;
+        int width, height, channels;
     };
 
 

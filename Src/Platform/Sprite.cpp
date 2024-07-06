@@ -1,13 +1,18 @@
 #include <Sprite.h>
 #include <vector>
+#include <Singleton.h>
+#include <ResourceManager.h>
 
 void HC::Sprite::Draw() const {
     glBindVertexArray(VAO);
 
+    if(HasTexture())
+        BindTexture();
     if(bUsingIndexBuffer)
         glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
     else
         glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+
 }
 
 void HC::Sprite::CreateBuffers() {
@@ -17,11 +22,16 @@ void HC::Sprite::CreateBuffers() {
 }
 
 
-HC::Sprite::Sprite(AABB aabb) : spriteAABB(aabb) {
+HC::Sprite::Sprite(AABB aabb, const std::string& texturePath) : spriteAABB(aabb) {
     CreateBuffers();
-
+    CreateTexture(texturePath);
     Update();
 
+}
+
+HC::Sprite::Sprite(AABB aabb) : spriteAABB(aabb){
+    CreateBuffers();
+    Update();
 }
 
 void HC::Sprite::BindBuffers(const std::vector<Vertex> &vertices, const std::vector<GLuint> &indices) {
@@ -72,4 +82,29 @@ void HC::Sprite::Update() {
 
 
     BindBuffers(vertices, indices);
+}
+
+
+void HC::Sprite::CreateTexture(const std::string &texturePath) {
+    auto textureResource = ResourceManager::GetInstance()->Load<TextureResource>(texturePath);
+
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    /* set the texture wrapping/filtering options (on the currently bound texture object) */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    if (textureResource->data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureResource->width, textureResource->height, 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, textureResource->data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+}
+
+void HC::Sprite::BindTexture() const {
+    glBindTexture(GL_TEXTURE_2D, texture);
 }

@@ -13,7 +13,6 @@ HC::SpriteRenderer::SpriteRenderer(const std::string& vertexShaderPath, const st
     CompileStatus compileStatus;
     program.GetCompileStatus(compileStatus);
     Assertion(compileStatus.success, std::format("Program Link Error: {0}", compileStatus.infoLog));
-
     program.Use();
     program.DeleteShader(shaderResource->GetShader().GetId());
     program.DeleteShader(fragmentResource->GetShader().GetId());

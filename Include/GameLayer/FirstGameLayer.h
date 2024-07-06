@@ -22,7 +22,7 @@ namespace HC {
         void InputCallback(const KeyboardInput& input);
     private:
         float cachedDeltaTime = 0.0f;
-        Sprite sprite {AABB(glm::vec2(0.0f, 0.0f), 0.5, 0.5)};
+        Sprite sprite {AABB(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
 
 
     };
