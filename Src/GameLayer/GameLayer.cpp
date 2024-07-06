@@ -5,7 +5,8 @@
 #include "Window.h"
 #include "imgui.h"
 #include "ResourceManager.h"
-
+#include <Assertion.h>
+#include <format>
 namespace HC {
     void GameLayer::BeginPlay() {
         std::shared_ptr<ShaderResource> shaderResource = ResourceManager::GetInstance()->Load<ShaderResource>(RESOURCES_PATH"/Shaders/vertex.glsl",GL_VERTEX_SHADER);
@@ -15,11 +16,9 @@ namespace HC {
         program.AttachShader(fragmentResource->GetShader().GetId());
         program.Link();
         CompileStatus compileStatus;
+
         program.GetCompileStatus(compileStatus);
-        if (!compileStatus.success) {
-            std::cout << "Failed to link program" << std::endl;
-            exit(1);
-        }
+        Assertion(compileStatus.success, std::format("Program Link Error: {0}", compileStatus.infoLog));
 
         program.Use();
         program.DeleteShader(shaderResource->GetShader().GetId());

@@ -8,6 +8,8 @@
 #include <FileIO.h>
 #include <Singleton.h>
 #include <Shader.h>
+#include <Assertion.h>
+#include <format>
 
 namespace HC {
     class IResource {
@@ -29,8 +31,8 @@ namespace HC {
     class Resource : public IResource {
     public:
         explicit Resource(const std::string& filepath) : IResource(filepath) { }
-        virtual bool Load() override = 0;
-        virtual bool Save() override = 0;
+        bool Load() override = 0;
+        bool Save() override = 0;
     };
 
     class FileResource : public Resource<FileResource> {
@@ -85,10 +87,7 @@ namespace HC {
             shader.Compile();
             CompileStatus compileStatus;
             shader.GetCompileStatus(compileStatus);
-            if (!compileStatus.success) {
-                std::cout << ("Failed to compile shader : " + compileStatus.infoLog) << std::endl;
-                exit(1);
-            }
+            Assertion(compileStatus.success, std::format("Shader compiling error: {0}", compileStatus.infoLog));
             return bSuccess;
 
         }

@@ -10,7 +10,7 @@ add_subdirectory(Thirdparty/imgui-docking)		#gui
 
 project(BestProject)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # add source files
 file(GLOB_RECURSE SOURCES "Src/Platform/*.cpp" "Src/GameLayer/*.cpp")
