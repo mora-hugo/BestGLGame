@@ -17,8 +17,7 @@ namespace HC {
     }
 
     void GameLayer::Draw() {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Renderer::ClearScreen(glm::vec4(0.3f, 0.3f, 0.3f, 1.0f));
     }
 #if REMOVE_IMGUI == 0
     void GameLayer::DrawImGui() {

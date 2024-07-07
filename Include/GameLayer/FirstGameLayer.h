@@ -2,6 +2,7 @@
 
 #include "GameLayer.h"
 #include "InputManager.h"
+#include "TileRenderer.h"
 #include <memory>
 
 namespace HC {
@@ -23,7 +24,9 @@ namespace HC {
     private:
         float cachedDeltaTime = 0.0f;
         Sprite sprite {AABB(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
-
+        TilesContainer tilesContainer;
+        float Zoom = 1.0f;
+        glm::vec2 cameraPosition = glm::vec2(0.0f, 0.0f);
 
     };
 };

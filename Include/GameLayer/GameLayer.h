@@ -2,6 +2,7 @@
 
 
 #include "SpriteRenderer.h"
+#include "TileRenderer.h"
 
 namespace HC {
     class GameLayer {
@@ -26,7 +27,9 @@ namespace HC {
 #endif
 
     protected:
-        SpriteRenderer Renderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+        TileRenderer tileRenderer  { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+        SpriteRenderer SpriteRenderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+
 
     };
 };

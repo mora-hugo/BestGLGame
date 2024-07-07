@@ -38,7 +38,7 @@ namespace HC {
 
     class FileResource : public Resource<FileResource> {
     public:
-        FileResource(const std::string& filepath, bool bIsBinaryFile = false) : Resource(filepath), reader(filepath, bIsBinaryFile), writer(filepath) {
+        explicit FileResource(const std::string& filepath, bool bIsBinaryFile = false) : Resource(filepath), reader(filepath, bIsBinaryFile), writer(filepath) {
 
         }
 
@@ -68,6 +68,112 @@ namespace HC {
 
     };
 
+    class ConfigResource : public FileResource {
+    public:
+        explicit ConfigResource(const std::string& filepath) : FileResource(filepath) {
+
+        }
+
+        bool Load() override {
+            bool bSuccess = FileResource::Load();
+            if (!bSuccess) {
+                return false;
+            }
+
+            size_t i = 0;
+            // if the line starts with #, it is a comment
+            while (i < bytes.size()) {
+                if(bytes[i] == '#') {
+                    while (bytes[i] != '\n') {
+                        i++;
+                    }
+                    continue;
+                }
+                // if the line is not a comment, we parse it
+                std::vector<char> line;
+                while (i < bytes.size() && bytes[i] != '\n') {
+                    line.push_back(bytes[i]);
+                    i++;
+                }
+                auto pair = ParseLine(std::string(line.begin(), line.end()));
+                Trim(pair.first);
+                Trim(pair.second);
+                i++;
+                if(pair.first.empty() || pair.second.empty()) {
+                    continue;
+                }
+                config.insert(pair);
+            }
+            bytes.clear();
+            return true;
+        }
+
+        std::pair<std::string, std::string> ParseLine(const std::string& line) {
+            // Get a representation of a line using a pair of key and value
+            std::vector<char> key;
+            std::vector<char> value;
+            for (size_t i = 0; i < line.size(); i++) {
+                if (line[i] == ':') {
+                    i++;
+                    while (i < line.size()) {
+                        value.push_back(line[i]);
+                        i++;
+                    }
+                    break;
+                }
+                key.push_back(line[i]);
+            }
+        return {std::string(key.begin(), key.end()), std::string(value.begin(), value.end())};
+    }
+
+
+        template <typename T, typename L>
+        bool AreSame() { return std::is_same<T, L>::value; }
+
+    bool GetValue(const std::string& key, std::string & outValue) {
+        auto it = config.find(key);
+        if (it != config.end()) {
+            outValue = it->second;
+        }
+        return it != config.end();
+    }
+
+    template<typename T>
+    bool GetValue(const std::string& key, T& outValue) {
+        std::string value;
+        if (!GetValue(key, value)) {
+            return false;
+        }
+        if (AreSame<T,float>()) {
+            outValue = std::stof(value);
+        }
+        else if (AreSame<T, double>()) {
+            outValue = std::stod(value);
+        }
+        else if (AreSame<T, int>()) {
+            outValue = std::stoi(value);
+        }
+        else if (AreSame<T, bool>()) {
+            outValue = (value == "true" ||  value == "1");
+        }
+        else {
+            return false;
+        }
+        return true;
+    }
+
+    private:
+        static std::string Trim(std::string& str)
+        {
+            str.erase(str.find_last_not_of(' ')+1);         //suffixing spaces
+            str.erase(0, str.find_first_not_of(' '));       //prefixing spaces
+            return str;
+        }
+
+    private:
+    std::map<std::string, std::string> config;
+};
+
     class ShaderResource : public FileResource {
     public:
         ShaderResource(const std::string& filepath, GLenum shaderType) : FileResource(filepath), shader(shaderType) {
@@ -92,15 +198,12 @@ namespace HC {
             return bSuccess;
 
         }
-
-
         Shader shader;
-
     };
 
     class TextureResource : public FileResource {
     public:
-        TextureResource(const std::string& filepath) : FileResource(filepath, true) {
+        explicit TextureResource(const std::string& filepath) : FileResource(filepath, true) {
 
         }
 

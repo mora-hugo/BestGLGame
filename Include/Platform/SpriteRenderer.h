@@ -2,8 +2,10 @@
 
 #include <Program.h>
 #include <Sprite.h>
+#include "Renderer.h"
+
 namespace HC {
-    class SpriteRenderer {
+    class SpriteRenderer : public Renderer {
     public:
         SpriteRenderer(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
         ~SpriteRenderer();
@@ -13,9 +15,5 @@ namespace HC {
 
         void DrawSprite(const Sprite& sprite) const;
 
-
-
-    private:
-        Program program;
     };
 }

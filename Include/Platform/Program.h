@@ -16,6 +16,7 @@ namespace HC {
             void Link();
             void GetCompileStatus(CompileStatus& compileStatus);
             GLuint GetId() const { return Id;}
+
             /* Uniforms */
             void SetUniformBool(const std::string &name, bool value) const;
             void SetUniformInt(const std::string &name, int value) const;
@@ -25,7 +26,7 @@ namespace HC {
 
 
     private:
-        GLuint Id;
+        GLuint Id = 0;
     };
 
 } // HC
