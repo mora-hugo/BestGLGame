@@ -55,7 +55,6 @@ namespace HC {
 
         glViewport(0, 0, width, height);
 
-
     }
 
     void Window::InitializeIMGUI() {

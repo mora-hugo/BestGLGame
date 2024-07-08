@@ -5,14 +5,14 @@
 
 
 
-HC::Sprite::Sprite(AABB aabb, const std::string& texturePath) : spriteAABB(aabb) {
+HC::Sprite::Sprite(Rect aabb, const std::string& texturePath) : spriteAABB(aabb) {
     CreateBuffers();
     CreateTexture(texturePath);
     Update();
 
 }
 
-HC::Sprite::Sprite(AABB aabb) : spriteAABB(aabb){
+HC::Sprite::Sprite(Rect aabb) : spriteAABB(aabb){
     CreateBuffers();
     Update();
 }

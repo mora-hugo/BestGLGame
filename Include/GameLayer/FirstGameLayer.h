@@ -9,7 +9,7 @@ namespace HC {
     class Model;
     class FirstGameLayer : public GameLayer {
     public:
-        FirstGameLayer();
+        FirstGameLayer(App * app);
         ~FirstGameLayer() override;
         void BeginPlay() override;
         void Update(float deltaTime) override;
@@ -23,9 +23,9 @@ namespace HC {
         void InputCallback(const KeyboardInput& input);
     private:
         float cachedDeltaTime = 0.0f;
-        Sprite sprite {AABB(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
+        Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
         TilesContainer tilesContainer;
-        float Zoom = 1.0f;
+        float Zoom = 55.0f;
         glm::vec2 cameraPosition = glm::vec2(0.0f, 0.0f);
 
     };

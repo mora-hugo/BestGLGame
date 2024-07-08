@@ -3,7 +3,10 @@
 #include <iostream>
 #include "glad/glad.h"
 #include "Window.h"
+#include <App.h>
 namespace HC {
+
+
     void GameLayer::BeginPlay() {
 
     }
@@ -28,6 +31,14 @@ namespace HC {
         Window::ImGUIFrameBegin();
         DrawImGui();
         Window::ImGUIRender();
+    }
+
+    GameLayer::GameLayer(struct App *appContext) : app(appContext) {
+
+    }
+
+    glm::vec2 GameLayer::GetWindowSize() const {
+        return app->GetWindowSize();
     }
 
 

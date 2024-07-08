@@ -7,7 +7,7 @@
 namespace HC {
     class GameLayer {
     public:
-        GameLayer() = default;
+        GameLayer(class App* appContext);
         virtual ~GameLayer() = default;
 
         GameLayer(const GameLayer&) = delete;
@@ -20,6 +20,8 @@ namespace HC {
         virtual void Draw();
         virtual void EndPlay();
 
+        glm::vec2 GetWindowSize() const;
+
 #if REMOVE_IMGUI == 0
         void DrawImGui_Internal();
 
@@ -29,6 +31,9 @@ namespace HC {
     protected:
         TileRenderer tileRenderer  { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
         SpriteRenderer SpriteRenderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+
+    private:
+        class App* app;
 
 
     };

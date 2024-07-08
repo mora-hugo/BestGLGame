@@ -3,12 +3,13 @@
 #include <imgui.h>
 #include <InputManager.h>
 #include <GLFW/glfw3.h>
-#include <ResourceManager.h>
-#include <glm/matrix.hpp>
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
-
+#include <App.h>
 namespace HC {
+    FirstGameLayer::FirstGameLayer(App *app) : GameLayer(app) {
+
+    }
     void FirstGameLayer::BeginPlay() {
 
 
@@ -32,10 +33,6 @@ namespace HC {
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
 
-        auto Conf = ResourceManager::GetInstance()->Load<ConfigResource>(RESOURCES_PATH"/Configs/Config.conf");
-        int key;
-        Conf->GetValue<int>("test", key);
-        std::cout << key << std::endl;
 
 
     }
@@ -45,6 +42,13 @@ namespace HC {
         cachedDeltaTime = deltaTime;
 
         sprite.Update();
+        glm::vec2 windowSize = GetWindowSize();
+
+        tileRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
+        SpriteRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
+        tileRenderer.GetProgram().SetUniformMat4("projection", glm::ortho((-windowSize.x / 2)*1/Zoom, (+windowSize.x / 2)*1/Zoom, (-windowSize.y/ 2)*1/Zoom, (+windowSize.y/ 2)*1/Zoom, 0.1f, 100.0f));
+        SpriteRenderer.GetProgram().SetUniformMat4("projection", glm::ortho((-windowSize.x / 2)*1/Zoom, (+windowSize.x / 2)*1/Zoom, (-windowSize.y/ 2)*1/Zoom, (+windowSize.y/ 2)*1/Zoom, 0.1f, 100.0f));
+
 
     }
 
@@ -58,15 +62,9 @@ namespace HC {
         GameLayer::Draw();
 
 
-        tileRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
-        SpriteRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
-        tileRenderer.GetProgram().SetUniformMat4("projection", glm::ortho(-2.0f*Zoom, +2.0f*Zoom, -1.5f*Zoom, +1.5f*Zoom, 0.1f, 100.0f));
-        SpriteRenderer.GetProgram().SetUniformMat4("projection", glm::ortho(-2.0f*Zoom, +2.0f*Zoom, -1.5f*Zoom, +1.5f*Zoom, 0.1f, 100.0f));
-
         SpriteRenderer.DrawSprite(sprite);
 
         tileRenderer.DrawTiles(tilesContainer);
-
 
 
 
@@ -87,9 +85,6 @@ namespace HC {
 
     }
 
-    FirstGameLayer::FirstGameLayer() {
-
-    }
 
     void FirstGameLayer::InputCallback(const KeyboardInput& input) {
         if (input.key == GLFW_KEY_W) {
@@ -111,16 +106,18 @@ namespace HC {
             Zoom += 1.f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_LEFT && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.x -= 1.f * cachedDeltaTime;
+            cameraPosition.x -= 0.3f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_RIGHT && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.x += 1.f * cachedDeltaTime;
+            cameraPosition.x += 0.3f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_UP && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.y += 1.f * cachedDeltaTime;
+            cameraPosition.y += 0.3f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_DOWN && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.y -= 1.f * cachedDeltaTime;
+            cameraPosition.y -= 0.3f * cachedDeltaTime;
         }
     }
+
+
 }

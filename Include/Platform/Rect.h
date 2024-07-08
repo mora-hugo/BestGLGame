@@ -3,7 +3,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
-struct AABB {
+struct Rect {
     glm::vec2 start;
     float width, height;
 

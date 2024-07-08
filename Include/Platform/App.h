@@ -14,6 +14,8 @@ namespace HC {
         int Run();
         float CalculateDeltaTime();
 
+        [[nodiscard]] glm::vec2 GetWindowSize() const;
+
     private:
         std::unique_ptr<Window> window;
         std::unique_ptr<GameLayer> gameLayer;
