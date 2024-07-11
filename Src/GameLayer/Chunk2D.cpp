@@ -1,12 +1,16 @@
-#include <TilesContainer.h>
+#include <Chunk2D.h>
 #include <iostream>
 
 
-HC::TilesContainer::TilesContainer() {
+HC::Chunk2D::Chunk2D() {
     CreateBuffers();
 }
 
-void HC::TilesContainer::GenerateBlocks() {
+HC::Chunk2D::~Chunk2D() {
+
+}
+
+void HC::Chunk2D::GenerateBlocks() {
     for (int x = 0; x < TILES_X; x++) {
         for (int y = 0; y < TILES_Y; y++) {
             tiles[x * TILES_Y + y] = (x+y)%2;
@@ -14,7 +18,7 @@ void HC::TilesContainer::GenerateBlocks() {
     }
 }
 
-void HC::TilesContainer::GenerateMesh() {
+void HC::Chunk2D::GenerateMesh() {
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
     std::cout << position.x << " " << position.y << std::endl;

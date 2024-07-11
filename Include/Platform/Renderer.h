@@ -2,6 +2,7 @@
 
 #include <Program.h>
 #include <Sprite.h>
+#include "Renderable.h"
 namespace HC {
     class Renderer {
     public:
@@ -10,11 +11,12 @@ namespace HC {
 
         Renderer(const Renderer&) = delete;
         Renderer &operator=(const Renderer&) = delete;
-        static void ClearScreen(const glm::vec4 color);
 
         [[nodiscard]] const Program& GetProgram() const { return program; }
-    protected:
-        void Draw() const;
+
+        void Draw(const IDrawable& renderable) const;
+        static void ClearScreen(const glm::vec4 color);
+
     protected:
         Program program;
     };

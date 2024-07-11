@@ -13,9 +13,17 @@ namespace HC {
         glm::vec2 texCoord;
     };
 
-    class Renderable {
+    class IDrawable {
+        friend class Renderer;
+    public:
+        virtual void Draw() const = 0;
+
+    };
+    class Renderable : public IDrawable {
+        public:
+            void Draw() const override;
         protected:
-            void Draw() const;
+            
 
             /* Buffers */
             void CreateBuffers();

@@ -3,7 +3,9 @@
 #include <iostream>
 #include "glad/glad.h"
 #include "Window.h"
+#include "glm/vec4.hpp"
 #include <App.h>
+#include "Renderer.h"
 namespace HC {
 
 
@@ -33,7 +35,7 @@ namespace HC {
         Window::ImGUIRender();
     }
 
-    GameLayer::GameLayer(struct App *appContext) : app(appContext) {
+    GameLayer::GameLayer(struct App* appContext) : app(appContext) {
 
     }
 

@@ -2,9 +2,12 @@
 
 #include "GameLayer.h"
 #include "InputManager.h"
-#include "TileRenderer.h"
+#include "Renderer.h"
+#include <Sprite.h>
 #include "Camera.h"
+#include <Chunk2D.h>
 #include <memory>
+#include "ChunkManager2D.h"
 
 namespace HC {
     class Model;
@@ -27,6 +30,6 @@ namespace HC {
         Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
         float Zoom = 55.0f;
         Camera camera;
-        std::vector<std::unique_ptr<TilesContainer>> containers;
+        ChunkManager2D ChunkManager;
     };
 };

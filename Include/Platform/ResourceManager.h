@@ -193,7 +193,7 @@ namespace HC {
             shader.Compile();
             CompileStatus compileStatus;
             shader.GetCompileStatus(compileStatus);
-            Assertion(compileStatus.success, std::format("Shader compiling error: {0}", compileStatus.infoLog));
+            Assertion(compileStatus.success, "Shader compiling error" + compileStatus.infoLog);
             bytes.clear();
             return bSuccess;
 

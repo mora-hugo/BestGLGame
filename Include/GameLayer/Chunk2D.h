@@ -4,21 +4,21 @@
 #include <Renderable.h>
 
 namespace HC {
-    struct TilesContainer : public Renderable{
+    struct Chunk2D : public Renderable{
         friend class TileRenderer;
         static constexpr int TILES_X = 30;
         static constexpr int TILES_Y = 100;
         static constexpr float Scale = 0.5f;
-        TilesContainer();
-        ~TilesContainer() = default;
+        Chunk2D();
+        ~Chunk2D();
         
 
-        TilesContainer(const TilesContainer&) = delete;
-        TilesContainer& operator=(const TilesContainer&) = delete;
+        Chunk2D(const Chunk2D&) = delete;
+        Chunk2D& operator=(const Chunk2D&) = delete;
 
         std::array<uint16_t, TILES_X*TILES_Y> tiles = {0};
 
-        glm::vec2 position{0.f};
+        glm::ivec2 position{0};
 
         void GenerateBlocks();
         void GenerateMesh();

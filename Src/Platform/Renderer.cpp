@@ -11,7 +11,7 @@ HC::Renderer::Renderer(const std::string& vertexShaderPath, const std::string& f
 
     CompileStatus compileStatus;
     program.GetCompileStatus(compileStatus);
-    Assertion(compileStatus.success, std::format("Program Link Error: {0}", compileStatus.infoLog));
+    Assertion(compileStatus.success, "Program Link Error" + compileStatus.infoLog);
     program.DeleteShader(shaderResource->GetShader().GetId());
     program.DeleteShader(fragmentResource->GetShader().GetId());
     ResourceManager::GetInstance()->Unload(vertexShaderPath);
@@ -22,8 +22,9 @@ HC::Renderer::~Renderer() {
 
 }
 
-void HC::Renderer::Draw() const{
+void HC::Renderer::Draw(const IDrawable& renderable) const{
     program.Use();
+    renderable.Draw();
 }
 
 void HC::Renderer::ClearScreen(const glm::vec4 color) {

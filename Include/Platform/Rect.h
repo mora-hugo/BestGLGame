@@ -10,4 +10,15 @@ struct Rect {
     void Move(const glm::vec2& offset) {
         start += offset;
     }
+
+    bool CollideWith(const Rect& OtherRect) {
+        // collision x-axis?
+        bool collisionX = start.x + width >= OtherRect.start.x &&
+            OtherRect.start.x + OtherRect.width >= start.x;
+        // collision y-axis?
+        bool collisionY = start.y + height >= OtherRect.start.x &&
+            OtherRect.start.y + OtherRect.height >= start.y;
+        // collision only if on both axes
+        return collisionX && collisionY;
+    }
 };

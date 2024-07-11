@@ -33,15 +33,17 @@ namespace HC {
 
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
+        ChunkManager.LoadChunks({ { -1,0}, { 0,0}, { 0,1} });
+        /*
         for(int i = -5; i < 5; i++) {
-            std::unique_ptr<TilesContainer> container = std::make_unique<TilesContainer>();
-            container->position = glm::vec2(i*TilesContainer::TILES_X*TilesContainer::Scale,(TilesContainer::TILES_Y*TilesContainer::Scale)/2);
+            std::unique_ptr<Chunk2D> container = std::make_unique<Chunk2D>();
+            container->position = glm::vec2(i* Chunk2D::TILES_X* Chunk2D::Scale,(Chunk2D::TILES_Y* Chunk2D::Scale)/2);
             container->GenerateBlocks();
             container->GenerateMesh();
 
             containers.push_back(std::move(container));
         }
-
+        */
 
 
     }
@@ -57,7 +59,7 @@ namespace HC {
         SpriteRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
         tileRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
-
+        camera.SetPosition(sprite.spriteAABB.start + (glm::vec2(sprite.spriteAABB.width, sprite.spriteAABB.height) / 2.f));
 
     }
 
@@ -69,10 +71,13 @@ namespace HC {
     void FirstGameLayer::Draw() {
 
         GameLayer::Draw();
-        SpriteRenderer.DrawSprite(sprite);
+        SpriteRenderer.Draw(sprite);
+        tileRenderer.Draw(ChunkManager);
+        /*
         for(auto& container : containers) {
-            tileRenderer.DrawTiles(*container);
+            tileRenderer.Draw(*container);
         }
+        */
     }
 #if REMOVE_IMGUI == 0
     void FirstGameLayer::DrawImGui() {

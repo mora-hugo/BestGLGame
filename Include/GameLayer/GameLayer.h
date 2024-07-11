@@ -1,8 +1,6 @@
 #pragma once
-
-
-#include "SpriteRenderer.h"
-#include "TileRenderer.h"
+#include "glm/vec2.hpp"
+#include "Renderer.h"
 
 namespace HC {
     class GameLayer {
@@ -29,8 +27,8 @@ namespace HC {
 #endif
 
     protected:
-        TileRenderer tileRenderer  { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
-        SpriteRenderer SpriteRenderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+        Renderer tileRenderer  { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
+        Renderer SpriteRenderer { RESOURCES_PATH"/Shaders/vertex.glsl", RESOURCES_PATH"/Shaders/fragment.glsl" };
 
     private:
         class App* app;
