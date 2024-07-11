@@ -113,7 +113,7 @@ namespace HC {
             std::vector<char> key;
             std::vector<char> value;
             for (size_t i = 0; i < line.size(); i++) {
-                if (line[i] == ':') {
+                if (line[i] == '=') {
                     i++;
                     while (i < line.size()) {
                         value.push_back(line[i]);

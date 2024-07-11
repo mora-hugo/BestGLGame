@@ -23,5 +23,7 @@ namespace HC {
         /* Delta time */
         std::chrono::time_point<std::chrono::steady_clock> currentTime;
         std::chrono::time_point<std::chrono::steady_clock> previousTime;
+
+
     };
 }

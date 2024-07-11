@@ -22,9 +22,10 @@ namespace HC {
         static void ImGUIRender();
 
 
-        [[nodiscard]] const glm::uvec2 & GetWindowSize() const { return windowSize; }
+        [[nodiscard]] static const glm::uvec2 & GetWindowSize() { return windowSize; }
         [[nodiscard]] const std::string & GetWindowName() const { return windowName; }
         [[nodiscard]] GLFWwindow * GetGLFWWindow() const { return window; }
+        static inline Event<glm::vec2> OnWindowResize;
 
 
     private:
@@ -41,7 +42,7 @@ namespace HC {
         Event<MouseInput> OnWindowHandledMouseInput;
     private:
         GLFWwindow * window;
-        glm::uvec2 windowSize;
+        static inline glm::uvec2 windowSize {0};
         std::string windowName;
     };
 

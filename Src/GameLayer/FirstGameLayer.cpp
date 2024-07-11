@@ -6,6 +6,8 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include <App.h>
+#include <iostream>
+
 namespace HC {
     FirstGameLayer::FirstGameLayer(App *app) : GameLayer(app) {
 
@@ -25,13 +27,20 @@ namespace HC {
         InputManager::GetInstance()->ListenKey(GLFW_KEY_RIGHT);
         InputManager::GetInstance()->ListenKey(GLFW_KEY_UP);
         InputManager::GetInstance()->ListenKey(GLFW_KEY_DOWN);
-        tilesContainer.GenerateBlocks();
-        tilesContainer.GenerateMesh();
+
 
         InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputCallback, this, 1));
 
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
+        for(int i = -5; i < 5; i++) {
+            std::unique_ptr<TilesContainer> container = std::make_unique<TilesContainer>();
+            container->position = glm::vec2(i*TilesContainer::TILES_X*TilesContainer::Scale,(TilesContainer::TILES_Y*TilesContainer::Scale)/2);
+            container->GenerateBlocks();
+            container->GenerateMesh();
+
+            containers.push_back(std::move(container));
+        }
 
 
 
@@ -44,10 +53,10 @@ namespace HC {
         sprite.Update();
         glm::vec2 windowSize = GetWindowSize();
 
-        tileRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
-        SpriteRenderer.GetProgram().SetUniformMat4("view", glm::lookAt(glm::vec3(cameraPosition.x,cameraPosition.y, 30), glm::vec3(cameraPosition.x,cameraPosition.y, 0), glm::vec3(0.0f, 1.0f, 0.0f)));
-        tileRenderer.GetProgram().SetUniformMat4("projection", glm::ortho((-windowSize.x / 2)*1/Zoom, (+windowSize.x / 2)*1/Zoom, (-windowSize.y/ 2)*1/Zoom, (+windowSize.y/ 2)*1/Zoom, 0.1f, 100.0f));
-        SpriteRenderer.GetProgram().SetUniformMat4("projection", glm::ortho((-windowSize.x / 2)*1/Zoom, (+windowSize.x / 2)*1/Zoom, (-windowSize.y/ 2)*1/Zoom, (+windowSize.y/ 2)*1/Zoom, 0.1f, 100.0f));
+        tileRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
+        SpriteRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
+        tileRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
+        SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
 
 
     }
@@ -60,17 +69,10 @@ namespace HC {
     void FirstGameLayer::Draw() {
 
         GameLayer::Draw();
-
-
         SpriteRenderer.DrawSprite(sprite);
-
-        tileRenderer.DrawTiles(tilesContainer);
-
-
-
-
-
-
+        for(auto& container : containers) {
+            tileRenderer.DrawTiles(*container);
+        }
     }
 #if REMOVE_IMGUI == 0
     void FirstGameLayer::DrawImGui() {
@@ -100,22 +102,22 @@ namespace HC {
             sprite.spriteAABB.start.x += 1.f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_PAGE_DOWN && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            Zoom -= 1.f * cachedDeltaTime;
+            camera.SetZoom(camera.GetZoom() - (1.f * cachedDeltaTime * 15.f));
         }
         if(input.key == GLFW_KEY_PAGE_UP && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            Zoom += 1.f * cachedDeltaTime;
+            camera.SetZoom(camera.GetZoom() + (1.f * cachedDeltaTime * 15.f));
         }
         if(input.key == GLFW_KEY_LEFT && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.x -= 0.3f * cachedDeltaTime;
+            camera.Move(glm::vec2(-1,0) * 3.f * cachedDeltaTime);
         }
         if(input.key == GLFW_KEY_RIGHT && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.x += 0.3f * cachedDeltaTime;
+            camera.Move(glm::vec2(+1,0) *3.f * cachedDeltaTime);
         }
         if(input.key == GLFW_KEY_UP && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.y += 0.3f * cachedDeltaTime;
+            camera.Move(glm::vec2(0,1) *3.f * cachedDeltaTime);
         }
         if(input.key == GLFW_KEY_DOWN && input.action == KeyboardAction::VP_KEY_REPEAT) {
-            cameraPosition.y -= 0.3f * cachedDeltaTime;
+            camera.Move(glm::vec2(0,-1) *3.f * cachedDeltaTime);
         }
     }
 

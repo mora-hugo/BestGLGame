@@ -8,6 +8,7 @@ namespace HC {
         friend class TileRenderer;
         static constexpr int TILES_X = 30;
         static constexpr int TILES_Y = 100;
+        static constexpr float Scale = 0.5f;
         TilesContainer();
         ~TilesContainer() = default;
         
@@ -16,6 +17,8 @@ namespace HC {
         TilesContainer& operator=(const TilesContainer&) = delete;
 
         std::array<uint16_t, TILES_X*TILES_Y> tiles = {0};
+
+        glm::vec2 position{0.f};
 
         void GenerateBlocks();
         void GenerateMesh();

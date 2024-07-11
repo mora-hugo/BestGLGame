@@ -3,6 +3,7 @@
 #include "GameLayer.h"
 #include "InputManager.h"
 #include "TileRenderer.h"
+#include "Camera.h"
 #include <memory>
 
 namespace HC {
@@ -24,9 +25,8 @@ namespace HC {
     private:
         float cachedDeltaTime = 0.0f;
         Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.5, 0.5), RESOURCES_PATH"/Textures/wall.jpg"};
-        TilesContainer tilesContainer;
         float Zoom = 55.0f;
-        glm::vec2 cameraPosition = glm::vec2(0.0f, 0.0f);
-
+        Camera camera;
+        std::vector<std::unique_ptr<TilesContainer>> containers;
     };
 };

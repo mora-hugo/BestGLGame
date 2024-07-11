@@ -15,7 +15,8 @@
 #include <backends/imgui_impl_opengl3.h>
 namespace HC {
 
-    Window::Window(int width, int height, const std::string &windowName) : windowSize(width, height), windowName(windowName) {
+    Window::Window(int width, int height, const std::string &windowName) :  windowName(windowName) {
+        windowSize = {width, height};
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -52,6 +53,7 @@ namespace HC {
 
         windowRef->windowSize.x = width;
         windowRef->windowSize.y = height;
+        OnWindowResize.Invoke(windowRef->GetWindowSize());
 
         glViewport(0, 0, width, height);
 
