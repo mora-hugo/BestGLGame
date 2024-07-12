@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ChunkManager2D.h"
 #include "Rect.h"
 void HC::ChunkManager2D::Draw() const
@@ -28,30 +29,56 @@ void HC::ChunkManager2D::LoadChunk(const glm::ivec2& ChunkPosition)
 
 void HC::ChunkManager2D::LoadChunks(const std::vector<glm::ivec2>& ChunksPositions, bool AutoUnloadOtherChunks)
 {
-	for (const glm::ivec2& ChunkPos : ChunksPositions) {
-		LoadChunk(ChunkPos);
-	}
+    if (!AutoUnloadOtherChunks) {
+        for (const glm::ivec2& ChunkPos : ChunksPositions) {
+            LoadChunk(ChunkPos);
+        }
+        return;
+    } else {
+        std::vector<glm::ivec2> NewChunksPositions = ChunksPositions;
+        std::vector<glm::ivec2> ChunksToUnload;
+
+        for (const auto& ChunkPair : Chunks) {
+            if (std::find(NewChunksPositions.begin(), NewChunksPositions.end(), ChunkPair.first) == NewChunksPositions.end()) {
+                ChunksToUnload.push_back(ChunkPair.first);
+            } else {
+                NewChunksPositions.erase(std::remove(NewChunksPositions.begin(), NewChunksPositions.end(), ChunkPair.first), NewChunksPositions.end());
+            }
+        }
+
+        // Unload chunks
+        for (const auto& ChunkPos : ChunksToUnload) {
+            Chunks.erase(ChunkPos);
+        }
+
+        // Load new chunks
+        for (const glm::ivec2& ChunkPos : NewChunksPositions) {
+            LoadChunk(ChunkPos);
+        }
+    }
 	//TODO unload other chunk
 }
 
 glm::ivec2 HC::ChunkManager2D::GetChunkPositionAtPosition(const glm::vec2& Position)
 {
-	return { std::floor(Position.x / Chunk2D::TILES_X * Chunk2D::Scale), 0 };
+	return { std::floor(Position.x / (Chunk2D::TILES_X * Chunk2D::Scale)), 0 };
 }
 
 std::vector<glm::ivec2> HC::ChunkManager2D::GetChunksPositionUsingFrustrum(const Camera& camera)
 {
-	std::vector<glm::ivec2> NewChunks;
-	const glm::uvec2 WindowSize = Window::GetWindowSize();
-	// Calculate the "size" of the visible screen using the Camera's Zoom parameter
-	const glm::ivec2 Size = WindowSize * (unsigned int)(1 / camera.GetZoom());
+    //TODO : Better implementation using camera frustrum
 
-	// This is the max number of chunk that need to be rendered and loaded
-	int MaxViewportChunkSize = (std::floor((Size.x / 2) / Chunk2D::TILES_X * Chunk2D::Scale)) + 1;
-	for (int i = -MaxViewportChunkSize; i <= MaxViewportChunkSize; i++) {
-		NewChunks.push_back({ i, 0});
-	}
+    glm::ivec2 CenteredChunkPos = GetChunkPositionAtPosition(camera.GetPosition());
 
-	return NewChunks;
+
+
+    return {CenteredChunkPos-glm::ivec2(2,0), CenteredChunkPos-glm::ivec2(1,0), CenteredChunkPos, CenteredChunkPos + glm::ivec2(1,0), CenteredChunkPos + glm::ivec2(2,0)};
 }
 
+uint16_t HC::ChunkManager2D::GetTileAtLocation(const glm::vec2 &WorldPosition) {
+    const glm::vec2 ChunkPos = GetChunkPositionAtPosition(WorldPosition);
+    if (Chunks.find(ChunkPos) != Chunks.end()) {
+        glm::vec2 RelativePosition = WorldPosition - glm::vec2 (Chunks[ChunkPos]->position);
+        return Chunks[ChunkPos]->GetTileAtLocation(glm::ivec2(RelativePosition / Chunk2D::Scale));
+    }
+}

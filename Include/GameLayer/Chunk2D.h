@@ -2,6 +2,7 @@
 
 #include <array>
 #include <Renderable.h>
+#include "FastNoiseLite.h"
 
 namespace HC {
     struct Chunk2D : public Renderable{
@@ -22,11 +23,15 @@ namespace HC {
 
         void GenerateBlocks();
         void GenerateMesh();
-
+        [[nodiscard]] uint16_t GetTileAtLocation(const glm::ivec2& RelativePosition) const;
 
 
     private:
+        void GenerateDefaultTerrain();
+        void GenerateCaves();
+    private:
 
+        FastNoiseLite noise;
         static inline const std::vector<Vertex> square_vertices = {
                 // positions               // colors               // texture coords
                 {{1.0f,  1.0f, 0.0f},   {1.0f, 0.0f, 0.0f},   {1.0f, 1.0f}},   // top right

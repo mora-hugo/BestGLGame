@@ -3,6 +3,7 @@
 #include "glm/gtx/hash.hpp"
 #include "Chunk2D.h"
 #include "Camera.h"
+#include <memory>
 #include <vector>
 
 namespace HC {
@@ -11,7 +12,9 @@ namespace HC {
 	{
 		bool operator()(const glm::ivec2& lhs, const glm::ivec2	& rhs) const
 		{
-			return lhs.x < rhs.x && lhs.y < rhs.y; 
+            if (lhs.x < rhs.x) return true;
+            if (lhs.x > rhs.x) return false;
+            return lhs.y < rhs.y;
 		}
 	};
 	class ChunkManager2D : public IDrawable {
@@ -20,6 +23,8 @@ namespace HC {
 	public:
 		void LoadChunk(const glm::ivec2& ChunkPosition);
 		void LoadChunks(const std::vector<glm::ivec2>& ChunksPositions, bool AutoUnloadOtherChunks = false);
+
+        uint16_t GetTileAtLocation(const glm::vec2& WorldPosition);
 		
 		static glm::ivec2 GetChunkPositionAtPosition(const glm::vec2& Position);
 		static std::vector<glm::ivec2> GetChunksPositionUsingFrustrum(const Camera& Camera);

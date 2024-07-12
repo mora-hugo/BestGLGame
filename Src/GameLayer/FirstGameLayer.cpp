@@ -33,19 +33,7 @@ namespace HC {
 
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
-        ChunkManager.LoadChunks({ { -1,0}, { 0,0}, { 0,1} });
-        /*
-        for(int i = -5; i < 5; i++) {
-            std::unique_ptr<Chunk2D> container = std::make_unique<Chunk2D>();
-            container->position = glm::vec2(i* Chunk2D::TILES_X* Chunk2D::Scale,(Chunk2D::TILES_Y* Chunk2D::Scale)/2);
-            container->GenerateBlocks();
-            container->GenerateMesh();
-
-            containers.push_back(std::move(container));
-        }
-        */
-
-
+        ChunkManager.LoadChunks({ { -1,0}, { 1,0} });
     }
 
     void FirstGameLayer::Update(float deltaTime) {
@@ -60,6 +48,7 @@ namespace HC {
         tileRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         camera.SetPosition(sprite.spriteAABB.start + (glm::vec2(sprite.spriteAABB.width, sprite.spriteAABB.height) / 2.f));
+        ChunkManager.LoadChunks(ChunkManager2D::GetChunksPositionUsingFrustrum(camera), true);
 
     }
 
@@ -71,13 +60,9 @@ namespace HC {
     void FirstGameLayer::Draw() {
 
         GameLayer::Draw();
-        SpriteRenderer.Draw(sprite);
         tileRenderer.Draw(ChunkManager);
-        /*
-        for(auto& container : containers) {
-            tileRenderer.Draw(*container);
-        }
-        */
+        SpriteRenderer.Draw(sprite);
+
     }
 #if REMOVE_IMGUI == 0
     void FirstGameLayer::DrawImGui() {
@@ -95,16 +80,16 @@ namespace HC {
 
     void FirstGameLayer::InputCallback(const KeyboardInput& input) {
         if (input.key == GLFW_KEY_W) {
-            sprite.spriteAABB.start.y += 1.f * cachedDeltaTime;
+            sprite.spriteAABB.start.y += 3.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_S) {
-            sprite.spriteAABB.start.y -= 1.f * cachedDeltaTime;
+            sprite.spriteAABB.start.y -= 3.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_A) {
-            sprite.spriteAABB.start.x -= 1.f * cachedDeltaTime;
+            sprite.spriteAABB.start.x -= 3.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_D) {
-            sprite.spriteAABB.start.x += 1.f * cachedDeltaTime;
+            sprite.spriteAABB.start.x += 3.f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_PAGE_DOWN && input.action == KeyboardAction::VP_KEY_REPEAT) {
             camera.SetZoom(camera.GetZoom() - (1.f * cachedDeltaTime * 15.f));
