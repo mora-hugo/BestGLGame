@@ -56,7 +56,7 @@ uint16_t HC::Chunk2D::GetTileAtLocation(const glm::ivec2 &RelativePosition) cons
 }
 
 void HC::Chunk2D::GenerateDefaultTerrain() {
-    int MaxHeightMap = TILES_X/3;
+    int MaxHeightMap = TILES_X/1.5;
     for (int x = 0; x < TILES_X; x++) {
 
         const float XPos = (x* Scale + position.x) / Scale;

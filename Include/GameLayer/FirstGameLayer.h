@@ -27,7 +27,7 @@ namespace HC {
         void InputCallback(const KeyboardInput& input);
     private:
         float cachedDeltaTime = 0.0f;
-        Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.7qqq, 1.35), RESOURCES_PATH"/Textures/wall.jpg"};
+        Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.7, 1.35), RESOURCES_PATH"/Textures/wall.jpg"};
         float Zoom = 55.0f;
         Camera camera;
         ChunkManager2D ChunkManager;

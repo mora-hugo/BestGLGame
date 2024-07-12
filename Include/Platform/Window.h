@@ -26,6 +26,7 @@ namespace HC {
         [[nodiscard]] const std::string & GetWindowName() const { return windowName; }
         [[nodiscard]] GLFWwindow * GetGLFWWindow() const { return window; }
         static inline Event<glm::vec2> OnWindowResize;
+        static glm::vec2 GetMousePosition();
 
 
     private:
@@ -41,7 +42,7 @@ namespace HC {
         Event<KeyboardInput> OnWindowHandledKeyboardInput;
         Event<MouseInput> OnWindowHandledMouseInput;
     private:
-        GLFWwindow * window;
+        static inline GLFWwindow * window;
         static inline glm::uvec2 windowSize {0};
         std::string windowName;
     };

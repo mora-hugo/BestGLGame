@@ -22,6 +22,8 @@ namespace HC {
         glm::ivec2 position{0};
 
         void GenerateBlocks();
+        void GenerateFlatGround();
+        void GenerateMountains();
         void GenerateMesh();
         [[nodiscard]] uint16_t GetTileAtLocation(const glm::ivec2& RelativePosition) const;
 

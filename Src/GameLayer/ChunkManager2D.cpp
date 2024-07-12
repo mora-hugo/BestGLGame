@@ -69,9 +69,6 @@ std::vector<glm::ivec2> HC::ChunkManager2D::GetChunksPositionUsingFrustrum(const
     //TODO : Better implementation using camera frustrum
 
     glm::ivec2 CenteredChunkPos = GetChunkPositionAtPosition(camera.GetPosition());
-
-
-
     return {CenteredChunkPos-glm::ivec2(2,0), CenteredChunkPos-glm::ivec2(1,0), CenteredChunkPos, CenteredChunkPos + glm::ivec2(1,0), CenteredChunkPos + glm::ivec2(2,0)};
 }
 

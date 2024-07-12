@@ -113,5 +113,12 @@ namespace HC {
         vp_window->OnWindowHandledMouseInput.Invoke(MouseInput(NO_KEY, MouseInput::MOUSE_MOVE_INT, mousePos));
     }
 
+    glm::vec2 Window::GetMousePosition() {
+        glm::dvec2 mousePos;
+        glfwGetCursorPos(window, &mousePos.x, &mousePos.y);
+        return mousePos;
+    }
+
+
 
 } // HC

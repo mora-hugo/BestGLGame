@@ -41,7 +41,6 @@ namespace HC {
         cachedDeltaTime = deltaTime;
 
         sprite.Update();
-        glm::vec2 windowSize = GetWindowSize();
 
         tileRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
         SpriteRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
@@ -80,16 +79,16 @@ namespace HC {
 
     void FirstGameLayer::InputCallback(const KeyboardInput& input) {
         if (input.key == GLFW_KEY_W) {
-            sprite.spriteAABB.start.y += 3.f * cachedDeltaTime;
+            sprite.spriteAABB.start.y += 5.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_S) {
-            sprite.spriteAABB.start.y -= 3.f * cachedDeltaTime;
+            sprite.spriteAABB.start.y -= 5.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_A) {
-            sprite.spriteAABB.start.x -= 3.f * cachedDeltaTime;
+            sprite.spriteAABB.start.x -= 5.f * cachedDeltaTime;
         }
         if (input.key == GLFW_KEY_D) {
-            sprite.spriteAABB.start.x += 3.f * cachedDeltaTime;
+            sprite.spriteAABB.start.x += 5.f * cachedDeltaTime;
         }
         if(input.key == GLFW_KEY_PAGE_DOWN && input.action == KeyboardAction::VP_KEY_REPEAT) {
             camera.SetZoom(camera.GetZoom() - (1.f * cachedDeltaTime * 15.f));
