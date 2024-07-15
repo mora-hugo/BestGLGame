@@ -48,6 +48,11 @@ namespace HC {
         SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         camera.SetPosition(sprite.spriteAABB.start + (glm::vec2(sprite.spriteAABB.width, sprite.spriteAABB.height) / 2.f));
         ChunkManager.LoadChunks(ChunkManager2D::GetChunksPositionUsingFrustrum(camera), true);
+        std::cout << ChunkManager.GetTileAtLocation(sprite.spriteAABB.start) << std::endl;
+        glm::vec2 mousePos = Window::GetMousePosition();
+        //transform window position to world position (with 0,0 at the center)
+        glm::vec2 worldPos = camera.ScreenToWorld(mousePos);
+        std::cout << "Mouse position in world: " << worldPos.x << " " << worldPos.y << std::endl;
 
     }
 
@@ -109,6 +114,7 @@ namespace HC {
             camera.Move(glm::vec2(0,-1) *3.f * cachedDeltaTime);
         }
     }
+
 
 
 }

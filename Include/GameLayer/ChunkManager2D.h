@@ -25,7 +25,8 @@ namespace HC {
 		void LoadChunks(const std::vector<glm::ivec2>& ChunksPositions, bool AutoUnloadOtherChunks = false);
 
         uint16_t GetTileAtLocation(const glm::vec2& WorldPosition);
-		
+        void SetTileAtLocation(const glm::vec2& WorldPosition, uint16_t Tile);
+
 		static glm::ivec2 GetChunkPositionAtPosition(const glm::vec2& Position);
 		static std::vector<glm::ivec2> GetChunksPositionUsingFrustrum(const Camera& Camera);
 		std::map < glm::ivec2, std::unique_ptr<Chunk2D>, IVec2Cmp> Chunks;

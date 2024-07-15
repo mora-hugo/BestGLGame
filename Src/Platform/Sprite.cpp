@@ -20,9 +20,10 @@ HC::Sprite::Sprite(Rect aabb) : spriteAABB(aabb){
 
 void HC::Sprite::Update() {
     glm::vec2 topLeft = spriteAABB.start;
-    glm::vec2 bottomRight = spriteAABB.start + glm::vec2{spriteAABB.width, spriteAABB.height};
-    glm::vec2 bottomLeft = spriteAABB.start + glm::vec2{0, spriteAABB.height};
+    glm::vec2 bottomRight = spriteAABB.start - glm::vec2{0, spriteAABB.height} + glm::vec2{spriteAABB.width, 0};
+    glm::vec2 bottomLeft = spriteAABB.start - glm::vec2{0, spriteAABB.height};
     glm::vec2 topRight = spriteAABB.start + glm::vec2{spriteAABB.width, 0};
+    //TODO
 
 
     std::vector<Vertex> vertices = {

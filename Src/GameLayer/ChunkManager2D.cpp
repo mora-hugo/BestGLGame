@@ -18,7 +18,6 @@ void HC::ChunkManager2D::LoadChunk(const glm::ivec2& ChunkPosition)
 	}
 	auto ChunkPtr = std::make_unique<Chunk2D>();
 	glm::vec2 WorldChunkPosition = glm::vec2(ChunkPosition) * Chunk2D::Scale * static_cast<float>(Chunk2D::TILES_X);
-	WorldChunkPosition.y = (Chunk2D::TILES_Y * Chunk2D::Scale) / 2;
 	ChunkPtr->position = WorldChunkPosition;
 	ChunkPtr->GenerateBlocks();
 	ChunkPtr->GenerateMesh();
@@ -73,9 +72,21 @@ std::vector<glm::ivec2> HC::ChunkManager2D::GetChunksPositionUsingFrustrum(const
 }
 
 uint16_t HC::ChunkManager2D::GetTileAtLocation(const glm::vec2 &WorldPosition) {
-    const glm::vec2 ChunkPos = GetChunkPositionAtPosition(WorldPosition);
-    if (Chunks.find(ChunkPos) != Chunks.end()) {
-        glm::vec2 RelativePosition = WorldPosition - glm::vec2 (Chunks[ChunkPos]->position);
-        return Chunks[ChunkPos]->GetTileAtLocation(glm::ivec2(RelativePosition / Chunk2D::Scale));
+    //Get tile at world position
+    glm::ivec2 ChunkPosition = GetChunkPositionAtPosition(WorldPosition);
+    if (Chunks.find(ChunkPosition) == Chunks.end()) {
+        return 0;
     }
+    glm::ivec2 RelativePosition = (WorldPosition - glm::vec2(Chunks[ChunkPosition]->position)) / Chunk2D::Scale;
+    std::cout << "Relative Position : " << RelativePosition.x << " " << RelativePosition.y << std::endl;
+    return Chunks[ChunkPosition]->GetTileAtLocation(RelativePosition);
+}
+
+void HC::ChunkManager2D::SetTileAtLocation(const glm::vec2 &WorldPosition, uint16_t Tile) {
+    glm::ivec2 ChunkPosition = GetChunkPositionAtPosition(WorldPosition);
+    if (Chunks.find(ChunkPosition) == Chunks.end()) {
+        return;
+    }
+    glm::ivec2 RelativePosition = (WorldPosition - glm::vec2(Chunks[ChunkPosition]->position)) / Chunk2D::Scale;
+    Chunks[ChunkPosition]->SetTileAtLocation(RelativePosition, Tile);
 }

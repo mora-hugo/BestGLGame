@@ -16,6 +16,8 @@ public:
     [[nodiscard]] const glm::mat4& GetProjectionMatrix();
     [[nodiscard]] float GetZoom() const;
     void UpdateMatrices();
+    glm::vec2 ScreenToWorld(const glm::vec2& ScreenPosition);
+
 
 private:
     void OnWindowResized(const glm::vec2& size);
