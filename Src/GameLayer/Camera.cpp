@@ -1,6 +1,7 @@
 #include <Camera.h>
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/ext.hpp"
 #include "Window.h"
 
 Camera::Camera() {
@@ -59,26 +60,9 @@ void Camera::OnWindowResized(const glm::vec2 &size) {
 }
 
 glm::vec2 Camera::ScreenToWorld(const glm::vec2 &screenPosition) {
-    // Obtenez la taille de la fenêtre
     glm::vec2 windowSize = HC::Window::GetWindowSize();
-
-    // Convertir la position de l'écran en coordonnées normalisées dans l'intervalle [-1, 1]
-    glm::vec4 normalizedScreenPos;
-    normalizedScreenPos.x = (2.0f * screenPosition.x) / windowSize.x - 1.0f;
-    normalizedScreenPos.y = 1.0f - (2.0f * screenPosition.y) / windowSize.y;
-    normalizedScreenPos.z = 0.0f;
-    normalizedScreenPos.w = 1.0f;
-
-    // Obtenir les matrices de vue et de projection
-    const glm::mat4 &view = GetViewMatrix();
-    const glm::mat4 &proj = GetProjectionMatrix();
-
-    // Calculer l'inverse de la matrice de vue-projection
-    glm::mat4 invViewProj = glm::inverse(proj * view);
-
-    // Transformer les coordonnées normalisées en coordonnées du monde
-    glm::vec4 worldPos = invViewProj * normalizedScreenPos;
-
-    // Diviser par w pour obtenir les coordonnées 2D finales
-    return glm::vec2(worldPos.x, worldPos.y);
+    //transform window position to world position (with 0,0 at the center)
+    glm::vec3 worldPos = glm::unProject(glm::vec3(screenPosition.x, screenPosition.y, 1), glm::inverse(GetViewMatrix() * glm::mat4{ 1.f }),GetProjectionMatrix(), glm::vec4(0, 0, windowSize.x, windowSize.y)) + glm::vec3(GetPosition(), 1);
+    worldPos.y = -worldPos.y;
+    return glm::vec2(worldPos) + GetPosition();
 }

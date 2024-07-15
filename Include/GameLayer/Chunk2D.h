@@ -22,16 +22,18 @@ namespace HC {
         glm::ivec2 position{0};
 
         void GenerateBlocks();
-        void GenerateMesh();
+        void RebuildMeshIfNecessary();
         void SetTileAtLocation(const glm::ivec2& RelativePosition, uint16_t Tile);
         [[nodiscard]] uint16_t GetTileAtLocation(const glm::ivec2& RelativePosition) const;
 
 
     private:
+        void GenerateMesh();
+
         void GenerateDefaultTerrain();
         void GenerateCaves();
     private:
-
+        bool bIsDirty = false;
         FastNoiseLite noise;
         static inline const std::vector<Vertex> square_vertices = {
                 // positions               // colors               // texture coords

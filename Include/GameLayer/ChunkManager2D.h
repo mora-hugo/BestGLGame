@@ -23,7 +23,7 @@ namespace HC {
 	public:
 		void LoadChunk(const glm::ivec2& ChunkPosition);
 		void LoadChunks(const std::vector<glm::ivec2>& ChunksPositions, bool AutoUnloadOtherChunks = false);
-
+		void RebuildChunksIfNecessary();
         uint16_t GetTileAtLocation(const glm::vec2& WorldPosition);
         void SetTileAtLocation(const glm::vec2& WorldPosition, uint16_t Tile);
 

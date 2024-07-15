@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.21)
 
 #add third party libraries
 add_subdirectory(Thirdparty/glfw-3.3.2)			#window oppener

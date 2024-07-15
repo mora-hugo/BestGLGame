@@ -20,7 +20,6 @@ void HC::ChunkManager2D::LoadChunk(const glm::ivec2& ChunkPosition)
 	glm::vec2 WorldChunkPosition = glm::vec2(ChunkPosition) * Chunk2D::Scale * static_cast<float>(Chunk2D::TILES_X);
 	ChunkPtr->position = WorldChunkPosition;
 	ChunkPtr->GenerateBlocks();
-	ChunkPtr->GenerateMesh();
 	Chunks.insert({ ChunkPosition, std::move(ChunkPtr) });
 
 
@@ -56,6 +55,14 @@ void HC::ChunkManager2D::LoadChunks(const std::vector<glm::ivec2>& ChunksPositio
         }
     }
 	//TODO unload other chunk
+}
+
+void HC::ChunkManager2D::RebuildChunksIfNecessary()
+{
+    for (auto& chunkPair : Chunks) {
+        if (!chunkPair.second) continue;
+        chunkPair.second->RebuildMeshIfNecessary();
+    }
 }
 
 glm::ivec2 HC::ChunkManager2D::GetChunkPositionAtPosition(const glm::vec2& Position)

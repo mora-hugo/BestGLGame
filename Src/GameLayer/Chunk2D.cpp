@@ -18,6 +18,15 @@ void HC::Chunk2D::GenerateBlocks() {
 
     GenerateDefaultTerrain();
     GenerateCaves();
+    bIsDirty = true;
+}
+
+void HC::Chunk2D::RebuildMeshIfNecessary()
+{
+    if (bIsDirty) {
+        GenerateMesh();
+        bIsDirty = false;
+    }
 }
 
 void HC::Chunk2D::GenerateMesh() {
@@ -59,7 +68,6 @@ void HC::Chunk2D::GenerateDefaultTerrain() {
 
         const float XPos = (x* Scale + position.x) / Scale;
         const int Height = std::clamp<int>((noise.GetNoise(XPos, 0.f) + 1 ) * MaxHeightMap, 0, TILES_Y);
-        std::cout << Height << std::endl;
         for(int y = 0; y < Height; y++)
         {
             SetTileAtLocation({x, y}, 1);
@@ -93,5 +101,11 @@ void HC::Chunk2D::SetTileAtLocation(const glm::ivec2 &RelativePosition, uint16_t
         std::cout << "Out of bounds : " << RelativePosition.x << " " << RelativePosition.y << std::endl;
         return;
     }
+    if (GetTileAtLocation(RelativePosition) == Tile) {
+        return;
+    }
+
     tiles[RelativePosition.x * TILES_Y + RelativePosition.y] = Tile;
+    bIsDirty = true;
+    std::cout << "dirty set" << std::endl;
 }

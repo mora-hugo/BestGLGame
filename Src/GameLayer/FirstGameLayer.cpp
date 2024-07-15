@@ -41,6 +41,7 @@ namespace HC {
         cachedDeltaTime = deltaTime;
 
         sprite.Update();
+        ChunkManager.RebuildChunksIfNecessary();
 
         tileRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
         SpriteRenderer.GetProgram().SetUniformMat4("view", camera.GetViewMatrix());
@@ -48,12 +49,7 @@ namespace HC {
         SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         camera.SetPosition(sprite.spriteAABB.start + (glm::vec2(sprite.spriteAABB.width, sprite.spriteAABB.height) / 2.f));
         ChunkManager.LoadChunks(ChunkManager2D::GetChunksPositionUsingFrustrum(camera), true);
-        std::cout << ChunkManager.GetTileAtLocation(sprite.spriteAABB.start) << std::endl;
-        glm::vec2 mousePos = Window::GetMousePosition();
-        //transform window position to world position (with 0,0 at the center)
-        glm::vec2 worldPos = camera.ScreenToWorld(mousePos);
-        std::cout << "Mouse position in world: " << worldPos.x << " " << worldPos.y << std::endl;
-
+        ChunkManager.SetTileAtLocation(camera.ScreenToWorld(Window::GetMousePosition()), 1);
     }
 
     void FirstGameLayer::EndPlay() {
