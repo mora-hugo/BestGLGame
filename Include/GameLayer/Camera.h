@@ -18,7 +18,6 @@ public:
     void UpdateMatrices();
     glm::vec2 ScreenToWorld(const glm::vec2& ScreenPosition);
 
-
 private:
     void OnWindowResized(const glm::vec2& size);
 private:

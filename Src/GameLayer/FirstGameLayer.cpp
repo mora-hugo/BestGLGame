@@ -29,7 +29,10 @@ namespace HC {
         InputManager::GetInstance()->ListenKey(GLFW_KEY_DOWN);
 
 
-        InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputCallback, this, 1));
+        InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputKeyboardCallback, this, 1));
+        InputManager::GetInstance()->MouseEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputMouseCallback, this, 1));
+
+
 
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
@@ -49,7 +52,7 @@ namespace HC {
         SpriteRenderer.GetProgram().SetUniformMat4("projection", camera.GetProjectionMatrix());
         camera.SetPosition(sprite.spriteAABB.start + (glm::vec2(sprite.spriteAABB.width, sprite.spriteAABB.height) / 2.f));
         ChunkManager.LoadChunks(ChunkManager2D::GetChunksPositionUsingFrustrum(camera), true);
-        ChunkManager.SetTileAtLocation(camera.ScreenToWorld(Window::GetMousePosition()), 1);
+
     }
 
     void FirstGameLayer::EndPlay() {
@@ -78,7 +81,7 @@ namespace HC {
     }
 
 
-    void FirstGameLayer::InputCallback(const KeyboardInput& input) {
+    void FirstGameLayer::InputKeyboardCallback(const KeyboardInput& input) {
         if (input.key == GLFW_KEY_W) {
             sprite.spriteAABB.start.y += 5.f * cachedDeltaTime;
         }
@@ -111,6 +114,14 @@ namespace HC {
         }
     }
 
+    void FirstGameLayer::InputMouseCallback(const MouseInput &input) {
+        if(input.action == MouseAction::VP_MOUSE_PRESSED && input.key == GLFW_MOUSE_BUTTON_LEFT) {
+            ChunkManager.SetTileAtLocation(camera.ScreenToWorld(input.position), Tile::DIRT);
+        }
+        else if(input.action == MouseAction::VP_MOUSE_PRESSED && input.key == GLFW_MOUSE_BUTTON_RIGHT) {
+            ChunkManager.SetTileAtLocation(camera.ScreenToWorld(input.position), Tile::AIR);
+        }
+    }
 
 
 }

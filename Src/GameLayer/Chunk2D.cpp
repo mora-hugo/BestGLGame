@@ -1,11 +1,13 @@
 #include <Chunk2D.h>
 #include <iostream>
 #include <algorithm>
+#include <ResourceManager.h>
 
 
-HC::Chunk2D::Chunk2D() {
+HC::Chunk2D::Chunk2D()  : Renderable(){
     CreateBuffers();
-    noise.SetFrequency(0.003f);
+    CreateTexture(RESOURCES_PATH"/Textures/Tiles.png");
+    noise.SetFrequency(0.007f);
     noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
     noise.SetFractalType(FastNoiseLite::FractalType_FBm);
 }
@@ -36,7 +38,7 @@ void HC::Chunk2D::GenerateMesh() {
     for (int x = 0; x < TILES_X; x++) {
         for (int y = 0; y < TILES_Y; y++) {
 
-            if (GetTileAtLocation({x, y}) == 1) {
+            if (GetTileAtLocation({x, y}) != Tile::AIR) {
                 for (int i = 0; i < square_indices.size(); i++) {
                     indices.push_back(square_indices[i] + vertices.size() );
                 }
@@ -45,13 +47,38 @@ void HC::Chunk2D::GenerateMesh() {
                     vertex.position *= Scale;
                     vertex.position +=  glm::vec3(position,0);
                     vertex.position += (glm::vec3(x, y, 0)*Scale);
+                    //produit en croix car les textures vont de 0 à 1
+
+
                     vertices.push_back(vertex);
+
                 }
 
             }
         }
     }
 
+    int i = 0;
+    for (int x = 0; x < TILES_X; x++) {
+        for (int y = 0; y < TILES_Y; y++) {
+
+            if (GetTileAtLocation({x, y}) != Tile::AIR) {
+                uint8_t mask = CalculateTileMask({x, y});
+                auto& vertex = vertices[i++];
+                switch(mask) {
+                    case Tile::NearTileMask::TOP:
+                        break;
+                    case Tile::NearTileMask::BOTTOM:
+                        break;
+
+
+                }
+
+
+            }
+        }
+    }
+    ApplyTexturesCoords();
     BindBuffers(vertices, indices);
 }
 
@@ -70,12 +97,12 @@ void HC::Chunk2D::GenerateDefaultTerrain() {
         const int Height = std::clamp<int>((noise.GetNoise(XPos, 0.f) + 1 ) * MaxHeightMap, 0, TILES_Y);
         for(int y = 0; y < Height; y++)
         {
-            SetTileAtLocation({x, y}, 1);
+            SetTileAtLocation({x, y}, Tile::DIRT);
         }
 
         for(int y = Height; y < TILES_Y; y++)
         {
-            SetTileAtLocation({x, y}, 0);
+            SetTileAtLocation({x, y}, Tile::AIR);
         }
     }
 }
@@ -89,7 +116,7 @@ void HC::Chunk2D::GenerateCaves() {
         for (float y = 0; y < TILES_Y; y++) {
             float noiseValue = caveNoise.GetNoise((x * Scale) +position.x, y);
             if(noiseValue > 0.7f) {
-                SetTileAtLocation({x, y}, 0);
+                SetTileAtLocation({x, y}, Tile::AIR);
             }
 
         }
@@ -107,5 +134,27 @@ void HC::Chunk2D::SetTileAtLocation(const glm::ivec2 &RelativePosition, uint16_t
 
     tiles[RelativePosition.x * TILES_Y + RelativePosition.y] = Tile;
     bIsDirty = true;
-    std::cout << "dirty set" << std::endl;
+}
+
+void HC::Chunk2D::ApplyTexturesCoords() {
+
+}
+
+uint8_t HC::Chunk2D::CalculateTileMask(const glm::ivec2 &position) const {
+    uint8_t mask = 0;
+
+    if (GetTileAtLocation({position.x, position.y + 1}) != Tile::AIR) {
+        mask |= Tile::NearTileMask::TOP;
+    }
+    if (GetTileAtLocation({position.x, position.y - 1}) != Tile::AIR) {
+        mask |= Tile::NearTileMask::BOTTOM;
+    }
+    if (GetTileAtLocation({position.x - 1, position.y}) != Tile::AIR) {
+        mask |= Tile::NearTileMask::LEFT;
+    }
+    if (GetTileAtLocation({position.x + 1, position.y}) != Tile::AIR) {
+        mask |= Tile::NearTileMask::RIGHT;
+    }
+
+    return mask;
 }

@@ -24,7 +24,8 @@ namespace HC {
         void DrawImGui() override;
 #endif
 
-        void InputCallback(const KeyboardInput& input);
+        void InputKeyboardCallback(const KeyboardInput& input);
+        void InputMouseCallback(const MouseInput& input);
     private:
         float cachedDeltaTime = 0.0f;
         Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.7, 1.35), RESOURCES_PATH"/Textures/wall.jpg"};

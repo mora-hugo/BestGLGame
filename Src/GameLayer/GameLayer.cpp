@@ -34,7 +34,7 @@ namespace HC {
         DrawImGui();
         Window::ImGUIRender();
     }
-
+#endif  
     GameLayer::GameLayer(struct App* appContext) : app(appContext) {
 
     }
@@ -44,5 +44,5 @@ namespace HC {
     }
 
 
-#endif
+
 }

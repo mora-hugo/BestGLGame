@@ -73,7 +73,7 @@ void HC::Renderable::CreateTexture(const std::string &texturePath) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     if (textureResource->data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureResource->width, textureResource->height, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 0, textureResource->channels == 4 ? GL_RGBA :  GL_RGB, textureResource->width, textureResource->height, 0, textureResource->channels == 4 ? GL_RGBA :  GL_RGB,
                      GL_UNSIGNED_BYTE, textureResource->data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }

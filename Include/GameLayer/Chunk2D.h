@@ -2,9 +2,24 @@
 
 #include <array>
 #include <Renderable.h>
+#include <unordered_map>
 #include "FastNoiseLite.h"
 
 namespace HC {
+
+    namespace Tile {
+        static inline uint16_t AIR = 0;
+        static inline uint16_t DIRT = 1;
+
+        namespace NearTileMask {
+            static const inline uint8_t TOP = 1 << 0; // 0001
+            static const inline uint8_t BOTTOM = 1 << 1; // 0010
+            static const inline uint8_t LEFT = 1 << 2; // 0100
+            static const inline uint8_t RIGHT = 1 << 3; // 1000
+
+        }
+    }
+
     struct Chunk2D : public Renderable{
         friend class TileRenderer;
         static constexpr int TILES_X = 30;
@@ -32,6 +47,8 @@ namespace HC {
 
         void GenerateDefaultTerrain();
         void GenerateCaves();
+        void ApplyTexturesCoords();
+        uint8_t CalculateTileMask(const glm::ivec2& position) const;
     private:
         bool bIsDirty = false;
         FastNoiseLite noise;
@@ -48,9 +65,23 @@ namespace HC {
                 1, 2, 3  // second triangle
         };
 
+/*
+        static inline const std::unordered_map<uint8_t, std::array<glm::vec2, 4>> textureMapping = {
+                {0,    {{0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}}}, // No adjacent tiles
+                {Tile::NearTileMask::TOP,    {{0.0f, 0.5f}, {1.0f, 0.5f}, {0.0f, 1.0f}, {1.0f, 1.0f}}}, // Top tile only
+                {Tile::NearTileMask::BOTTOM, {{0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 0.5f}, {1.0f, 0.5f}}}, // Bottom tile only
+                {Tile::NearTileMask::LEFT,   {{0.0f, 0.0f}, {0.5f, 0.0f}, {0.0f, 1.0f}, {0.5f, 1.0f}}}, // Left tile only
+                {Tile::NearTileMask::RIGHT,  {{0.5f, 0.0f}, {1.0f, 0.0f}, {0.5f, 1.0f}, {1.0f, 1.0f}}}, // Right tile only
+                {Tile::NearTileMask::TOP | Tile::NearTileMask::LEFT,  {{0.0f, 0.5f}, {0.5f, 0.5f}, {0.0f, 1.0f}, {0.5f, 1.0f}}}, // Top and Left tiles
+                {Tile::NearTileMask::TOP | Tile::NearTileMask::RIGHT, {{0.5f, 0.5f}, {1.0f, 0.5f}, {0.5f, 1.0f}, {1.0f, 1.0f}}}, // Top and Right tiles
+                {Tile::NearTileMask::BOTTOM | Tile::NearTileMask::LEFT,  {{0.0f, 0.0f}, {0.5f, 0.0f}, {0.0f, 0.5f}, {0.5f, 0.5f}}}, // Bottom and Left tiles
+                {Tile::NearTileMask::BOTTOM | Tile::NearTileMask::RIGHT, {{0.5f, 0.0f}, {1.0f, 0.0f}, {0.5f, 0.5f}, {1.0f, 0.5f}}}, // Bottom and Right tiles
+                {Tile::NearTileMask::TOP | Tile::NearTileMask::BOTTOM, {{0.0f, 0.25f}, {1.0f, 0.25f}, {0.0f, 0.75f}, {1.0f, 0.75f}}}, // Top and Bottom tiles
+                {Tile::NearTileMask::LEFT | Tile::NearTileMask::RIGHT, {{0.25f, 0.0f}, {0.75f, 0.0f}, {0.25f, 1.0f}, {0.75f, 1.0f}}}, // Left and Right tiles
 
-
-
+                {Tile::NearTileMask::TOP | Tile::NearTileMask::BOTTOM | Tile::NearTileMask::LEFT | Tile::NearTileMask::RIGHT, {{0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}}}, // All adjacent tiles
+        };
+*/
 
     };
 }
