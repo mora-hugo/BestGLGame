@@ -58,21 +58,29 @@ void HC::Chunk2D::GenerateMesh() {
         }
     }
 
+    
     int i = 0;
+
+    //TODO
+    float tile_size_y = 1 / 32;
+    float tile_size_x = 1 / 15;
     for (int x = 0; x < TILES_X; x++) {
         for (int y = 0; y < TILES_Y; y++) {
 
             if (GetTileAtLocation({x, y}) != Tile::AIR) {
                 uint8_t mask = CalculateTileMask({x, y});
-                auto& vertex = vertices[i++];
-                switch(mask) {
-                    case Tile::NearTileMask::TOP:
+                
+                for (int y = 0; y < 4; y++) {
+                    if (i + y >=  vertices.size()) {
                         break;
-                    case Tile::NearTileMask::BOTTOM:
-                        break;
-
-
+                    }
+                    if (textures.find(mask) == textures.end()) {
+                        i += 4;
+                        continue;
+                    }
+                    vertices[i + y].texCoord = vertices[i + y].texCoord * (glm::vec2(textures.at(mask)) * glm::vec2(tile_size_x, tile_size_y));
                 }
+                i += 4;
 
 
             }

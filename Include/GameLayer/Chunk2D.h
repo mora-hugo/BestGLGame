@@ -65,9 +65,27 @@ namespace HC {
                 1, 2, 3  // second triangle
         };
 
+        static inline const std::unordered_map<uint8_t, glm::ivec2> textures = {
+            {Tile::NearTileMask::TOP, {2, 3}},
+            {Tile::NearTileMask::LEFT, {4, 0}},
+            {Tile::NearTileMask::BOTTOM, {2, 0}},
+            {Tile::NearTileMask::RIGHT, {0, 0}},
+
+            {Tile::NearTileMask::RIGHT | Tile::NearTileMask::BOTTOM, {0,4}},
+            {Tile::NearTileMask::RIGHT | Tile::NearTileMask::TOP, {0,5}},
+            {Tile::NearTileMask::RIGHT | Tile::NearTileMask::LEFT, {1,1}},
+
+            {Tile::NearTileMask::LEFT | Tile::NearTileMask::BOTTOM, {1,4}},
+            {Tile::NearTileMask::LEFT | Tile::NearTileMask::TOP, {1,5}},
+
+            {Tile::NearTileMask::TOP | Tile::NearTileMask::BOTTOM, {1,1}},
+
+
+
+        };
 /*
         static inline const std::unordered_map<uint8_t, std::array<glm::vec2, 4>> textureMapping = {
-                {0,    {{0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 1.0f}}}, // No adjacent tiles
+                {0,    {c}}, // No adjacent tiles
                 {Tile::NearTileMask::TOP,    {{0.0f, 0.5f}, {1.0f, 0.5f}, {0.0f, 1.0f}, {1.0f, 1.0f}}}, // Top tile only
                 {Tile::NearTileMask::BOTTOM, {{0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 0.5f}, {1.0f, 0.5f}}}, // Bottom tile only
                 {Tile::NearTileMask::LEFT,   {{0.0f, 0.0f}, {0.5f, 0.0f}, {0.0f, 1.0f}, {0.5f, 1.0f}}}, // Left tile only
