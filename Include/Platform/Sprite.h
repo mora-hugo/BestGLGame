@@ -13,6 +13,7 @@ namespace HC {
         friend class SpriteRenderer;
 
         Rect spriteAABB;
+        Sprite(Rect aabb, const std::string& tiledTexturePath, const glm::vec2& tilesSize, const glm::vec2& tilePosition);
         Sprite(Rect aabb, const std::string& texturePath);
         Sprite(Rect aabb);
         void Update();

@@ -218,6 +218,7 @@ namespace HC {
             if (!data) {
                 return false;
             }
+            format = channels == 3 ? GL_RGB : GL_RGBA;
 
             return true;
         }
@@ -227,7 +228,7 @@ namespace HC {
         }
 
         stbi_uc* data;
-        int width, height, channels;
+        int width, height, channels, format;
     };
 
 
