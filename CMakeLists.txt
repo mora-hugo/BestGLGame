@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.26)
 
 #add third party libraries
 add_subdirectory(Thirdparty/glfw-3.3.2)			#window oppener
@@ -10,7 +10,7 @@ add_subdirectory(Thirdparty/imgui-docking)		#gui
 
 project(BestProject)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # add source files
 file(GLOB_RECURSE SOURCES "Src/Platform/*.cpp" "Src/GameLayer/*.cpp")

@@ -3,6 +3,7 @@
 #include <Window.h>
 #include <GameLayer.h>
 #include "FirstGameLayer.h"
+#include "ResourceManager.h"
 
 int HC::App::Run() {
     gameLayer->BeginPlay();
@@ -22,15 +23,14 @@ int HC::App::Run() {
 }
 
 HC::App::App() {
-    window = std::make_unique<Window>(800, 600, "Hello World");
-    gameLayer = std::make_unique<FirstGameLayer>();
+    auto Config = ResourceManager::GetInstance()->Load<ConfigResource>(RESOURCES_PATH"/Configs/Config.conf");
+    glm::ivec2 windowSize {0};
+    std::string windowName;
+    Assertion(Config && Config->GetValue<int>("window_width", windowSize.x) && Config->GetValue<int>("window_height", windowSize.y) && Config->GetValue("window_name", windowName), "Failed to load window parameters from config");
+    window = std::make_unique<Window>(windowSize.x, windowSize.y, windowName);
+    gameLayer = std::make_unique<FirstGameLayer>(this);
 
     InputManager::GetInstance()->Init(window.get());
-    InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&HC::App::Input, this, 1));
-}
-
-void HC::App::Input(const HC::KeyboardInput &input) {
-    std::cout << "Key: " << input.key << std::endl;
 }
 
 
@@ -46,6 +46,11 @@ float HC::App::CalculateDeltaTime() {
     currentTime = std::chrono::high_resolution_clock::now();
     return dt;
 }
+
+glm::vec2 HC::App::GetWindowSize() const {
+    return window->GetWindowSize();
+}
+
 
 
 

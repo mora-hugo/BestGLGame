@@ -1,5 +1,6 @@
 //
 
+#include <iostream>
 #include "Program.h"
 #include "glm/gtc/type_ptr.hpp"
 
@@ -34,23 +35,30 @@ namespace HC {
         glDeleteShader(shaderId);
     }
 
-    void Program::Use() {
+    void Program::Use() const {
         glUseProgram(Id);
     }
 
     void Program::SetUniformBool(const std::string &name, bool value) const {
         glUniform1i(glGetUniformLocation(Id, name.c_str()), (int)value);
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR) {
+            std::cerr << "1Tile OpenGL Error: " << error << std::endl;
+        }
     }
 
     void Program::SetUniformInt(const std::string &name, int value) const {
         glUniform1i(glGetUniformLocation(Id, name.c_str()), value);
+
     }
 
     void Program::SetUniformFloat(const std::string &name, float value) const {
         glUniform1f(glGetUniformLocation(Id, name.c_str()), value);
+
     }
 
     void Program::SetUniformMat4(const std::string &name, const glm::mat4 &mat) const {
+        Use();
         glUniformMatrix4fv(glGetUniformLocation(Id, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
     }
 } // HC

@@ -116,7 +116,7 @@ It's mostly a bunch of personal notes, probably incomplete. Feel free to query i
  - tables: see https://github.com/ocornut/imgui/issues/2957#issuecomment-569726095
 
  - group: BeginGroup() needs a border option. (~#1496)
- - group: IsHovered() after EndGroup() covers whole AABB rather than the intersection of individual items. Is that desirable?
+ - group: IsHovered() after EndGroup() covers whole Rect rather than the intersection of individual items. Is that desirable?
  - group: merge deactivation/activation within same group (fwd WasEdited flag). (#2550)
 
 !- color: the color conversion helpers/types are a mess and needs sorting out.

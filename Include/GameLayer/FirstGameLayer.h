@@ -1,13 +1,19 @@
 #pragma once
 
 #include "GameLayer.h"
+#include "InputManager.h"
+#include "Renderer.h"
+#include <Sprite.h>
+#include "Camera.h"
+#include <Chunk2D.h>
 #include <memory>
+#include "ChunkManager2D.h"
 
 namespace HC {
     class Model;
     class FirstGameLayer : public GameLayer {
     public:
-        FirstGameLayer();
+        FirstGameLayer(App * app);
         ~FirstGameLayer() override;
         void BeginPlay() override;
         void Update(float deltaTime) override;
@@ -17,10 +23,14 @@ namespace HC {
 #if REMOVE_IMGUI == 0
         void DrawImGui() override;
 #endif
+
+        void InputKeyboardCallback(const KeyboardInput& input);
+        void InputMouseCallback(const MouseInput& input);
     private:
         float cachedDeltaTime = 0.0f;
-        std::unique_ptr<Model> model;
-
-
+        Sprite sprite {Rect(glm::vec2(0.0f, 0.0f), 0.7, 1.35), RESOURCES_PATH"/Textures/wall.jpg"};
+        float Zoom = 55.0f;
+        Camera camera;
+        ChunkManager2D ChunkManager;
     };
 };

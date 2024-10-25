@@ -12,8 +12,9 @@ namespace HC {
         App();
         ~App();
         int Run();
-        void Input(const KeyboardInput &input);
         float CalculateDeltaTime();
+
+        [[nodiscard]] glm::vec2 GetWindowSize() const;
 
     private:
         std::unique_ptr<Window> window;
@@ -22,5 +23,7 @@ namespace HC {
         /* Delta time */
         std::chrono::time_point<std::chrono::steady_clock> currentTime;
         std::chrono::time_point<std::chrono::steady_clock> previousTime;
+
+
     };
 }
