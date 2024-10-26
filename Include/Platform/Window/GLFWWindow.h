@@ -20,11 +20,11 @@ namespace HC {
 
         [[nodiscard]] GLFWwindow * GetGLFWWindow() const { return window; }
         [[nodiscard]] const glm::vec2 GetMousePosition() const override;
-        [[nodiscard]] int GetKey(int key) override;
-        [[nodiscard]] int GetMouseButton(int key) override;
-        [[nodiscard]] bool ShouldClose() override;
+        [[nodiscard]] int GetKey(int key) const override;
+        [[nodiscard]] int GetMouseButton(int key) const override;
+        [[nodiscard]] bool ShouldClose() const override;
 
-        void SwapBuffers() override;
+        void SwapBuffers() const override;
 
 
         void ImGUIFrameBegin() override;

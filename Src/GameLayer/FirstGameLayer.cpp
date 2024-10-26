@@ -1,11 +1,11 @@
 
 #include <FirstGameLayer.h>
 #include <imgui.h>
-#include <InputManager.h>
 #include <GLFW/glfw3.h>
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include <App.h>
+#include <Inputs/Input.h>
 #include <iostream>
 
 namespace HC {
@@ -17,22 +17,19 @@ namespace HC {
 
         GameLayer::BeginPlay();
 
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_W);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_S);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_A);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_D);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_PAGE_DOWN);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_PAGE_UP);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_LEFT);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_RIGHT);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_UP);
-        InputManager::GetInstance()->ListenKey(GLFW_KEY_DOWN);
+        Input::ListenKey(GLFW_KEY_W);
+        Input::ListenKey(GLFW_KEY_S);
+        Input::ListenKey(GLFW_KEY_A);
+        Input::ListenKey(GLFW_KEY_D);
+        Input::ListenKey(GLFW_KEY_PAGE_DOWN);
+        Input::ListenKey(GLFW_KEY_PAGE_UP);
+        Input::ListenKey(GLFW_KEY_LEFT);
+        Input::ListenKey(GLFW_KEY_RIGHT);
+        Input::ListenKey(GLFW_KEY_UP);
+        Input::ListenKey(GLFW_KEY_DOWN);
 
-
-        InputManager::GetInstance()->KeyboardEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputKeyboardCallback, this, 1));
-        InputManager::GetInstance()->MouseEvent.AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputMouseCallback, this, 1));
-
-
+        Input::GetKeyboardEventRepeat().AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputKeyboardCallback, this, 1));
+        Input::GetAllMouseEvent().AddListener(this, HC_BIND_MEMBER_FUNCTION_ARGS(&FirstGameLayer::InputMouseCallback, this, 1));
 
         tileRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
         SpriteRenderer.GetProgram().SetUniformMat4("model", glm::mat4{1.0f});
@@ -82,6 +79,7 @@ namespace HC {
 
 
     void FirstGameLayer::InputKeyboardCallback(const KeyboardInput& input) {
+
         if (input.key == GLFW_KEY_W) {
             sprite.spriteAABB.start.y += 5.f * cachedDeltaTime;
         }
@@ -115,10 +113,10 @@ namespace HC {
     }
 
     void FirstGameLayer::InputMouseCallback(const MouseInput &input) {
-        if(input.action == MouseAction::VP_MOUSE_PRESSED && input.key == GLFW_MOUSE_BUTTON_LEFT) {
+        if(input.key == GLFW_MOUSE_BUTTON_LEFT) {
             ChunkManager.SetTileAtLocation(camera.ScreenToWorld(input.position), Tile::DIRT);
         }
-        else if(input.action == MouseAction::VP_MOUSE_PRESSED && input.key == GLFW_MOUSE_BUTTON_RIGHT) {
+        else if(input.key == GLFW_MOUSE_BUTTON_RIGHT) {
             ChunkManager.SetTileAtLocation(camera.ScreenToWorld(input.position), Tile::AIR);
         }
     }

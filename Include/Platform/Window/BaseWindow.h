@@ -4,8 +4,8 @@
 #include <string>
 #include "glm/fwd.hpp"
 #include "glm/detail/type_vec2.hpp"
-#include "Event.h"
-#include <Inputs.h>
+#include "Event/Event.h"
+#include "Inputs/Inputs.h"
 
 namespace HC {
     class BaseWindow {
@@ -23,10 +23,10 @@ namespace HC {
         [[nodiscard]] virtual const glm::vec2 GetMousePosition() const = 0;
 
         //TODO usage of glfw key for now everywhere
-        virtual int GetKey(int key) = 0;
-        virtual int GetMouseButton(int key) = 0;
-        virtual bool ShouldClose() = 0;
-        virtual void SwapBuffers() = 0;
+        virtual int GetKey(int key) const = 0;
+        virtual int GetMouseButton(int key) const = 0;
+        virtual bool ShouldClose() const = 0;
+        virtual void SwapBuffers() const = 0;
 
     protected:
         void SetWindowSize(const glm::uvec2 &size) { windowSize = size; }

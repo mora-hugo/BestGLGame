@@ -1,6 +1,6 @@
 #pragma once
 #define NO_KEY -1
-#include <glm/vec2.hpp>
+#include "glm/vec2.hpp"
 namespace HC {
 
     enum class KeyboardAction {
@@ -24,7 +24,7 @@ namespace HC {
         KeyboardInput() = default;
         KeyboardInput(int key, int scancode, int action);
         KeyboardInput(const KeyboardInput&) = default;
-        KeyboardInput &operator=(const KeyboardInput&) = delete;
+
 
     private:
         static KeyboardAction GetKeyboardActionFromInt(int action);

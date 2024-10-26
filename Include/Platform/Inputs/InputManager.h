@@ -4,26 +4,25 @@
 #include <unordered_map>
 #include <functional>
 #include <string>
-#include <glm/vec2.hpp>
-#include <Singleton.h>
-#include <Event.h>
+#include "glm/vec2.hpp"
+#include "Singleton.h"
+#include "Event/Event.h"
 #include <set>
-#include <Window/BaseWindow.h>
+#include "Window/BaseWindow.h"
 
 
 
 
 
 namespace HC {
-    class InputManager : public Singleton<InputManager>{
+    class InputManager {
     public:
-        InputManager() = default;
+        explicit InputManager(BaseWindow& context_window);
 
         InputManager(const InputManager&) = delete;
         InputManager& operator=(const InputManager&) = delete;
 
 
-        void Init(class BaseWindow* context_window);
 
 
         //TODO : Better way to handle reapeat keys
@@ -42,14 +41,27 @@ namespace HC {
 
         bool IsKeyPressed(int key);
         bool IsMouseKeyPressed(int key);
+
+        glm::uvec2 GetMousePosition() const;
+
     private:
 
         const KeyboardInput& UnqueueKeyboardInput();
         const MouseInput& UnqueueMouseInput();
 
     public:
+
         Event<KeyboardInput> KeyboardEvent;
+        Event<KeyboardInput> KeyboardPressedEvent;
+        Event<KeyboardInput> KeyboardReleasedEvent;
+        Event<KeyboardInput> KeyboardRepeatEvent;
+
+
         Event<MouseInput> MouseEvent;
+        Event<MouseInput> MousePressedEvent;
+        Event<MouseInput> MouseReleasedEvent;
+        Event<MouseInput> MouseRepeatEvent;
+
 
     private:
 
@@ -60,7 +72,7 @@ namespace HC {
         std::set<int> keysMouseInUse;
 
 
-        BaseWindow* window;
+        const BaseWindow& window;
     };
 }
 

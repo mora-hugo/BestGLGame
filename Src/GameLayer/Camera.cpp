@@ -37,6 +37,7 @@ const glm::mat4 &Camera::GetProjectionMatrix() {
 
 void Camera::UpdateMatrices() {
     bIsDirty = false;
+
     //glm::vec2 windowSize = HC::GLFWWindow::GetWindowSize();
     glm::vec2 windowSize = {800,600};
     viewMatrix = glm::lookAt(glm::vec3(position.x,position.y, 30), glm::vec3(position.x,position.y, 0), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -61,8 +62,9 @@ void Camera::OnWindowResized(const glm::vec2 &size) {
 }
 
 glm::vec2 Camera::ScreenToWorld(const glm::vec2 &screenPosition) {
+
     //glm::vec2 windowSize = HC::GLFWWindow::GetWindowSize();
-    glm::vec2 windowSize = {};
+    glm::vec2 windowSize = {800,600};
     //transform window position to world position (with 0,0 at the center)
     glm::vec3 worldPos = glm::unProject(glm::vec3(screenPosition.x, screenPosition.y, 1), glm::inverse(GetViewMatrix() * glm::mat4{ 1.f }),GetProjectionMatrix(), glm::vec4(0, 0, windowSize.x, windowSize.y)) + glm::vec3(GetPosition(), 1);
     worldPos.y = -worldPos.y;
