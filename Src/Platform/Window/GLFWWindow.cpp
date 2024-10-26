@@ -119,21 +119,21 @@ namespace HC {
         return {xpos, ypos};
     }
 
-    int GLFWWindow::GetKey(int key) {
+    int GLFWWindow::GetKey(int key) const {
         return glfwGetKey(window, key);
     }
 
-    int GLFWWindow::GetMouseButton(int key) {
+    int GLFWWindow::GetMouseButton(int key) const {
         return glfwGetMouseButton(window, key);
     }
 
 
 
-    bool GLFWWindow::ShouldClose() {
+    bool GLFWWindow::ShouldClose() const {
         return glfwWindowShouldClose(window);
     }
 
-    void GLFWWindow::SwapBuffers() {
+    void GLFWWindow::SwapBuffers() const {
         glfwSwapBuffers(window);
     }
 

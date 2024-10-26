@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <chrono>
-#include "InputManager.h"
+#include "Inputs/InputManager.h"
 
 namespace HC {
     class BaseWindow;
@@ -21,6 +21,7 @@ namespace HC {
     private:
         std::unique_ptr<BaseWindow> window;
         std::unique_ptr<GameLayer> gameLayer;
+        std::unique_ptr<InputManager> inputManager;
 
         /* Delta time */
         std::chrono::time_point<std::chrono::steady_clock> currentTime;

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Window/GLFWWindow.h"
 
-#include "InputManager.h"
+#include "Inputs/InputManager.h"
 #include "App.h"
 
 int main() {

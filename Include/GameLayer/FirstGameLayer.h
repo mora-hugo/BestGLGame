@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameLayer.h"
-#include "InputManager.h"
+#include "Inputs/InputManager.h"
 #include "Renderer.h"
 #include <Sprite.h>
 #include "Camera.h"

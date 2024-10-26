@@ -4,12 +4,13 @@
 #include <GameLayer.h>
 #include "FirstGameLayer.h"
 #include "ResourceManager.h"
+#include <Inputs/Input.h>
 
 int HC::App::Run() {
     gameLayer->BeginPlay();
     while (!window->ShouldClose()) {
         glfwPollEvents();
-        InputManager::GetInstance()->ProcessInput();
+        inputManager->ProcessInput();
         gameLayer->Update(CalculateDeltaTime());
         gameLayer->Draw();
 
@@ -29,8 +30,8 @@ HC::App::App() {
     Assertion(Config && Config->GetValue<int>("window_width", windowSize.x) && Config->GetValue<int>("window_height", windowSize.y) && Config->GetValue("window_name", windowName), "Failed to load window parameters from config");
     CreateWindow(windowSize, windowName);
     gameLayer = std::make_unique<FirstGameLayer>(this);
-
-    InputManager::GetInstance()->Init(window.get());
+    inputManager = std::make_unique<InputManager>(*GetWindow());
+    Input::Initialize(inputManager.get());
 }
 
 void HC::App::CreateWindow(const glm::ivec2 &windowSize,
