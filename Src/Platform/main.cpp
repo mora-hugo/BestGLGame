@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Window.h"
+#include "Window/GLFWWindow.h"
 
 #include "InputManager.h"
 #include "App.h"

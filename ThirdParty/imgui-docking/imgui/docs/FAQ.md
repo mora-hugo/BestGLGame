@@ -291,25 +291,25 @@ You can push a pointer, a string, or an integer value into the ID stack.
 Remember that IDs are formed from the concatenation of _everything_ pushed into the ID stack.
 At each level of the stack, we store the seed used for items at this level of the ID stack.
 ```cpp
-Begin("Window");
+Begin("GLFWWindow");
 for (int i = 0; i < 100; i++)
 {
   PushID(i);           // Push i to the id tack
-  Button("Click");     // Label = "Click",  ID = hash of ("Window", i, "Click")
+  Button("Click");     // Label = "Click",  ID = hash of ("GLFWWindow", i, "Click")
   PopID();
 }
 for (int i = 0; i < 100; i++)
 {
   MyObject* obj = Objects[i];
   PushID(obj);
-  Button("Click");     // Label = "Click",  ID = hash of ("Window", obj pointer, "Click")
+  Button("Click");     // Label = "Click",  ID = hash of ("GLFWWindow", obj pointer, "Click")
   PopID();
 }
 for (int i = 0; i < 100; i++)
 {
   MyObject* obj = Objects[i];
   PushID(obj->Name);
-  Button("Click");     // Label = "Click",  ID = hash of ("Window", obj->Name, "Click")
+  Button("Click");     // Label = "Click",  ID = hash of ("GLFWWindow", obj->Name, "Click")
   PopID();
 }
 End();

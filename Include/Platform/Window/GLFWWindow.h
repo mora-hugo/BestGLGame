@@ -1,0 +1,50 @@
+#pragma once
+
+#include <string>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/vec2.hpp>
+#include "BaseWindow.h"
+#include "IImGuiWindow.h"
+#include "Utils.h"
+
+namespace HC {
+    class GLFWWindow : public BaseWindow, public IImGUIWindow  {
+    public:
+        GLFWWindow(int width, int height, const std::string &windowName);
+        ~GLFWWindow() override;
+
+
+        GLFWWindow(const GLFWWindow&) = delete;
+        GLFWWindow &operator=(const GLFWWindow&) = delete;
+
+        [[nodiscard]] GLFWwindow * GetGLFWWindow() const { return window; }
+        [[nodiscard]] const glm::vec2 GetMousePosition() const override;
+        [[nodiscard]] int GetKey(int key) override;
+        [[nodiscard]] int GetMouseButton(int key) override;
+        [[nodiscard]] bool ShouldClose() override;
+
+        void SwapBuffers() override;
+
+
+        void ImGUIFrameBegin() override;
+        void ImGUIRender()  override;
+
+
+
+    private:
+        void InitializeIMGUI()  override;
+
+        /* GLFW Callbacks */
+        static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+        static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+        static void mouse_callback(GLFWwindow *window, int button, int action, int mods);
+        static void mouse_position_callback(GLFWwindow *window, double xpos, double ypos);
+
+        void InitializeGLFW(int width, int height, const std::string &windowName);
+        void SetCallbacks();
+    private:
+        GLFWwindow * window;
+    };
+
+} // HC

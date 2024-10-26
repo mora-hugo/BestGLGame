@@ -1,13 +1,13 @@
 #include <App.h>
 #include <iostream>
-#include <Window.h>
+#include "Window/GLFWWindow.h"
 #include <GameLayer.h>
 #include "FirstGameLayer.h"
 #include "ResourceManager.h"
 
 int HC::App::Run() {
     gameLayer->BeginPlay();
-    while (!glfwWindowShouldClose(window->GetGLFWWindow())) {
+    while (!window->ShouldClose()) {
         glfwPollEvents();
         InputManager::GetInstance()->ProcessInput();
         gameLayer->Update(CalculateDeltaTime());
@@ -16,7 +16,7 @@ int HC::App::Run() {
 #if REMOVE_IMGUI == 0
         gameLayer->DrawImGui_Internal();
 #endif
-        glfwSwapBuffers(window->GetGLFWWindow());
+        window->SwapBuffers();
     }
     gameLayer->EndPlay();
     return EXIT_SUCCESS;
@@ -27,13 +27,16 @@ HC::App::App() {
     glm::ivec2 windowSize {0};
     std::string windowName;
     Assertion(Config && Config->GetValue<int>("window_width", windowSize.x) && Config->GetValue<int>("window_height", windowSize.y) && Config->GetValue("window_name", windowName), "Failed to load window parameters from config");
-    window = std::make_unique<Window>(windowSize.x, windowSize.y, windowName);
+    CreateWindow(windowSize, windowName);
     gameLayer = std::make_unique<FirstGameLayer>(this);
 
     InputManager::GetInstance()->Init(window.get());
 }
 
-
+void HC::App::CreateWindow(const glm::ivec2 &windowSize,
+                           const std::string &windowName) {
+    window = std::make_unique<GLFWWindow>(windowSize.x, windowSize.y, windowName);
+}
 
 
 HC::App::~App() {

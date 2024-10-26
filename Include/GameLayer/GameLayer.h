@@ -18,7 +18,7 @@ namespace HC {
         virtual void Draw();
         virtual void EndPlay();
 
-        glm::vec2 GetWindowSize() const;
+        [[nodiscard]] glm::vec2 GetWindowSize() const;
 
 #if REMOVE_IMGUI == 0
         void DrawImGui_Internal();
