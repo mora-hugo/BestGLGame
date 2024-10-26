@@ -22,7 +22,7 @@ namespace HC {
             event.ClearListeners();
         }
 
-
+    private:
         Event<Args...>& event;
     };
 
