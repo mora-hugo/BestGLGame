@@ -5,7 +5,7 @@
 #include "InputManager.h"
 
 namespace HC {
-    class Window;
+    class BaseWindow;
     class GameLayer;
     class App {
     public:
@@ -16,8 +16,10 @@ namespace HC {
 
         [[nodiscard]] glm::vec2 GetWindowSize() const;
 
+        [[nodiscard]] BaseWindow* GetWindow() const { return window.get(); }
+
     private:
-        std::unique_ptr<Window> window;
+        std::unique_ptr<BaseWindow> window;
         std::unique_ptr<GameLayer> gameLayer;
 
         /* Delta time */
@@ -25,5 +27,6 @@ namespace HC {
         std::chrono::time_point<std::chrono::steady_clock> previousTime;
 
 
+        void CreateWindow(const glm::ivec2 &windowSize, const std::string &windowName);
     };
 }

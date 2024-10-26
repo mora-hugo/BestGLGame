@@ -1,11 +1,9 @@
 
 #include <GameLayer.h>
-#include <iostream>
-#include "glad/glad.h"
-#include "Window.h"
-#include "glm/vec4.hpp"
+#include "Window/GLFWWindow.h"
 #include <App.h>
 #include "Renderer.h"
+#include <Interface.h>
 namespace HC {
 
 
@@ -30,9 +28,13 @@ namespace HC {
     }
 
     void GameLayer::DrawImGui_Internal() {
-        Window::ImGUIFrameBegin();
+        auto* imGUIInterface = Interface::GetInterface<IImGUIWindow>(app->GetWindow());
+        if(!imGUIInterface) return;
+
+        imGUIInterface->ImGUIFrameBegin();
         DrawImGui();
-        Window::ImGUIRender();
+        imGUIInterface->ImGUIRender();
+
     }
 #endif  
     GameLayer::GameLayer(struct App* appContext) : app(appContext) {
